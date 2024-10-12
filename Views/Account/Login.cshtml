@@ -7,39 +7,71 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><strong>Sea<strong><i>Wise</i> App | Log in (v1)</title>
+    <title>SeaWise App | Log in (v1)</title>
+    
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="~/Data/AdminLTE/plugins/fontawesome-free/css/all.min.css" type="text/css" media="all">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/fontawesome-free/css/all.min.css" />
     <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="~/Data/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css" type="text/css" media="all">
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
     <!-- Theme style -->
-    <link rel="stylesheet" href="~/Data/AdminLTE/dist/css/adminlte.min.css" type="text/css" media="all">
+    <link rel="stylesheet" href="~/themedata/adminlte/dist/css/adminlte.min.css" />
+
+
+
+
+
+    <style>
+       
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-page {
+            /* Arka plan resmi */
+            background-image: url(@Url.Content("/images/LoginBackground.jpg") );
+            background-size: cover; 
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        
+        .login-box {
+            width: 360px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="~/Data/AdminLTE/index2.html" class="h1"><b>Sea</b><i>Wise</i></a>
+                <a href="~/ThemeData/AdminLTE/index2.html" class="h1"><b>Sea</b><i>Wise</i></a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
 
-                <form action="~/Data/AdminLTE/index3.html" method="post">
+                <form action="Account" method="post">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <span><b>SW</b></span>
                             </div>
                         </div>
-                        <input type="number" class="form-control" placeholder="Internal Eployee Code">
+                        <input type="text" class="form-control" id="employeeCode" name="swCode" placeholder="____-____">
                         
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" name="password"  placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -63,22 +95,12 @@
                     </div>
                 </form>
 
-                <div class="social-auth-links text-center mt-2 mb-3">
-                    <a href="#" class="btn btn-block btn-primary">
-                        <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-                    </a>
-                    <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                    </a>
-                </div>
-                <!-- /.social-auth-links -->
+               <br/>
 
                 <p class="mb-1">
                     <a href="forgot-password.html">I forgot my password</a>
                 </p>
-                <p class="mb-0">
-                    <a href="register.html" class="text-center">Register a new membership</a>
-                </p>
+                
             </div>
             <!-- /.card-body -->
         </div>
@@ -86,10 +108,20 @@
     </div>
     <!-- /.login-box -->
     <!-- jQuery -->
-    <script src="~/Data/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <script src="~/themedata/adminlte/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
-    <script src="~/Data/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/themedata/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="~/Data/AdminLTE/dist/js/adminlte.min.js"></script>
+    <script src="~/themedata/adminlte/dist/js/adminlte.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/themedata/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#employeeCode").inputmask("9999-9999");
+        });
+    </script>
+
 </body>
 </html>

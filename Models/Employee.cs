@@ -25,6 +25,8 @@ public partial class Employee
 
     public int Salary { get; set; }
 
+    public bool IsActiveWorker { get; set; }
+
     public virtual EmployeePosition EmployeePosition { get; set; } = null!;
 
     public virtual ICollection<InspectionParticipant> InspectionParticipants { get; set; } = new List<InspectionParticipant>();

@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "Ships";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken() <!-- CSRF token ekliyoruz -->
+            <div class="input-group">
+                <input type="search" class="form-control form-control-lg" id="searchInput" onkeyup="search()" placeholder="Type Ship name, IMO Number or Owner">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-lg btn-default" onclick="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="searchResults"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script> 
+    function search() {
+        var query = $('#searchInput').val(); // jQuery ile input değerini alıyoruz
+
+        // CSRF token'ını alıyoruz
+        var token = $('input[name="__RequestVerificationToken"]').val();
+
+        $.ajax({
+            url: '/Ship/Search', // İstek URL'si
+            type: 'POST', // İstek tipi
+            contentType: 'application/json', // Gönderilen verinin tipi
+            headers: {
+                'RequestVerificationToken': token // CSRF token'ı ekliyoruz
+            },
+            data: JSON.stringify({ searchTerm: query }), // Arama terimini JSON formatında gönderiyoruz
+            success: function (data) {
+                $('#searchResults').html(data); // Gelen veriyi arama sonuçları alanına yazdırıyoruz
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error); // Hata durumunu konsola yazdırıyoruz
+            }
+        });
+    }
+
+</script>

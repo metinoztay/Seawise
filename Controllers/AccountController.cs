@@ -1,12 +1,81 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Seawise.Models;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Seawise.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly Db8536Context _context;
+
+        public AccountController()
+        {
+            _context = new Db8536Context();
+        }
         public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string swCode, string password)
+        {
+            swCode = "SW" + swCode.Replace("-","");
+            string hashPassword = CreateHash(password);
+            var userInformations = _context.Employees.FirstOrDefault(x => x.InternalEmployeeCode == swCode && x.Password == hashPassword);
+
+
+            if (userInformations != null) //kullanıcı bulundu
+            {
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name,swCode),
+                };
+                var userIdentity = new ClaimsIdentity(claims, "Login"); //kullanıcı kimliği oluşturuldu
+                ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
+                await HttpContext.SignInAsync(principal);
+
+                return RedirectToAction("Index", "Home", userInformations);
+                /*
+                if (userInformations.Authority == "Teacher")
+                {
+                    return RedirectToAction("Index", "Teacher", userInformations);
+                }
+                else if (userInformations.Authority == "Student")
+                {
+                    return RedirectToAction("Index", "Student", userInformations);
+                }
+                else if (userInformations.Authority == "Admin")
+                {
+                    return RedirectToAction("Index", "Admin", userInformations);
+                }*/
+            }
+            return View();
+        }
+
+        public IActionResult Logout()
+        {
+            return View();
+        }
+
+        public static string CreateHash(string password) //kullanıcı parolarları şifrelendiğinde kullanılacak
+        {
+            
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] tempString = Encoding.UTF8.GetBytes(password);
+            tempString = md5.ComputeHash(tempString);
+            StringBuilder sb = new StringBuilder();
+
+            foreach (byte ba in tempString)
+            {
+                sb.Append(ba.ToString("x2").ToLower());
+            }
+
+            return sb.ToString();
         }
     }
 }
