@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Seawise.Models;
 
 namespace Seawise.Controllers
@@ -13,12 +14,21 @@ namespace Seawise.Controllers
         }
 
         [HttpPost]
-        public ActionResult Search([FromBody] string searchTerm)
-        {
-            var results = _context.Ships.Where(s => s.ShipName == (searchTerm)).ToList();
+        [ValidateAntiForgeryToken] 
+        public ActionResult Search(string searchTerm)
+        { // gelen verinin ımonumarası na ve owner ismine göre de aranması sağlanacak
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var allShips = _context.Ships
+                                    .Include(s => s.ShipOwner) // Owner tablosunu dahil ediyoruz
+                                    .ToList();
+                return PartialView("_ShipSearchResults", allShips);
+            }
 
-            // Sonuçları bir partial view ile dönün
+            var results = _context.Ships.Where(s => s.ShipName.Contains(searchTerm)).Include(s => s.ShipOwner).ToList();
+
             return PartialView("_ShipSearchResults", results);
         }
+
     }
 }
