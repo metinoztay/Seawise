@@ -11,12 +11,11 @@
         <div class="col-md-3">
             <button class="card card-outline card-primary btn-block" style=" padding:0; text-align:left; background-color:transparent;" onclick="redirectToShipDetails(@ship.ShipId)">
                 <img cap" alt="" style="height: 180px; width: 100%; display: block;" src="@ship.PhotoUrl" data-holder-rendered="true">
-
                 <div class="card-body">
                     <dl>
-                        <dt>@ship.ShipName</dt>
+                        <dt>@ship.ShipName &nbsp; <img src="~/images/flags/@($"{ship.CountryCode}.svg")" style="height: 15px;" class="elevation-2" alt="User Image"> </dt>
                         <dd>Owner: @ship.ShipOwner.Name</dd>
-                        </dl>                   
+                    </dl>
                 </div>
             </button>
         </div>

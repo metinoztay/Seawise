@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "Ship Owners";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <form id="searchForm">
+            @Html.AntiForgeryToken() 
+            <div class="input-group">
+                <input type="search" class="form-control form-control-lg" id="searchInput" autofocus onfocus="search()" onkeyup="search()" placeholder="Type Owner Name, Ship Name or Phone Number">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-lg btn-default" onclick="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<section class="content"><div id="searchResults" class="container-fluid"></div></section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function search() {
+        var query = $('#searchInput').val();
+
+        var token = $('input[name="__RequestVerificationToken"]').val();
+
+        $.ajax({
+            url: '@Url.Action("OwnerSearch", "Search")',
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded',
+            headers: {
+                'RequestVerificationToken': token
+            },
+            data: { searchTerm: query },
+            success: function (data) {
+                $('#searchResults').html(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+</script>

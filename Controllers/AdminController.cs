@@ -21,5 +21,12 @@ namespace Seawise.Controllers
             ViewBag.ActiveTabId = "AddShip";
             return View();
         }
+
+        public IActionResult ShipOwners()
+        {
+            ViewBag.ActiveTabId = "ShipOwners";
+            return View();
+        }
+
     }
 }

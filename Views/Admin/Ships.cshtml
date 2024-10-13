@@ -28,11 +28,10 @@
     function search() {
         var query = $('#searchInput').val();
 
-        // CSRF token'ını formdan alıyoruz
         var token = $('input[name="__RequestVerificationToken"]').val();
 
         $.ajax({
-            url: '@Url.Action("Search", "Ship")',
+            url: '@Url.Action("ShipSearch", "Search")',
             type: 'POST', 
             contentType: 'application/x-www-form-urlencoded', 
             headers: {
