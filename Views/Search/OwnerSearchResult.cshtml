@@ -29,7 +29,7 @@
                                                 <text>This owner is a company.</text>}
                                             </p>
                                         <ul class="ml-4 mb-0 fa-ul text-muted">
-                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Address: @owner.Adress</li>
+                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Address: @owner.Address</li>
                                             <li class="small"><span class="fa-li"><i class="fas fa-lg fa-map-marker-alt"></i></span> Country: @owner.CountryCodeNavigation.CountryName &nbsp; <img src="~/images/flags/@($"{owner.CountryCode}.svg")" style="height: 15px;" class="elevation-1" alt="User Image"></li>
                                             <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone : @owner.Phone</li>
                                         </ul>
@@ -41,10 +41,7 @@
                             </div>
                             <div class="card-footer">
                                 <div class="text-right">
-                                    <a href="#" class="btn btn-sm bg-teal">
-                                        <i class="fas fa-comments"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-sm btn-primary">
+                                    <a asp-controller="Admin" asp-action="OwnerProfile" asp-route-ownerId="@owner.ShipOwnerId" class="btn btn-sm btn-primary">
                                         <i class="fas fa-user"></i> View Profile
                                     </a>
                                 </div>
@@ -56,9 +53,5 @@
         </div>
     </div>
 
-    <script>
-        function redirectToShipDetails(shipId) {
-        window.location.href = '/Admin/ShipDetails/' + shipId;
-        }
-    </script>
+    
 }

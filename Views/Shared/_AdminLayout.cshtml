@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewBag.Title | Seawise</title>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
@@ -16,6 +17,26 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/themedata/adminlte/dist/css/adminlte.min.css"/>
     <style type="text/css" id="operaUserStyle"></style>
+
+  
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/daterangepicker/daterangepicker.css"/>
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css"/>
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css"/>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"/>
+    <!-- Select2 -->
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"/>
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css"/>
+    <!-- BS Stepper -->
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/bs-stepper/css/bs-stepper.min.css"/>
+    <!-- dropzonejs -->
+    <link rel="stylesheet" href="~/themedata/adminlte/plugins/dropzone/min/dropzone.min.css"/>
+    
 </head>
 <!--
 `body` tag options:
@@ -436,10 +457,10 @@
             <!-- /.content-header -->
             <!-- Main content -->
             <div class="content">
-                
+                <div class="container-fluid">
                     @RenderBody()
                     <!-- /.row -->
-                
+                </div>
                 <!-- /.container-fluid -->
             </div>
             <!-- /.content -->
@@ -463,16 +484,17 @@
     </div>
     <!-- ./wrapper -->
     <!-- REQUIRED SCRIPTS -->
+    
     <!-- jQuery -->
     <script src="~/themedata/adminlte/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="~/themedata/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE -->
     <script src="~/themedata/adminlte/dist/js/adminlte.js"></script>
-
+    <script src="~/themedata/adminlte/plugins/select2/js/select2.full.min.js"></script>
     <!-- OPTIONAL SCRIPTS -->
     <script src="~/themedata/adminlte/plugins/chart.js/Chart.min.js"></script>
-   
+    @await RenderSectionAsync("Scripts", required: false)
 
     <script>
         var year = new Date().getFullYear();

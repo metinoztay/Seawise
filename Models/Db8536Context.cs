@@ -318,7 +318,7 @@ public partial class Db8536Context : DbContext
         {
             entity.HasKey(e => e.ShipOwnerId).HasName("PK__OWNERS");
 
-            entity.Property(e => e.Adress)
+            entity.Property(e => e.Address)
                 .HasMaxLength(250)
                 .IsUnicode(false);
             entity.Property(e => e.CountryCode)

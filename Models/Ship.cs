@@ -19,6 +19,8 @@ public partial class Ship
 
     public string PhotoUrl { get; set; } = null!;
 
+    public DateOnly LaunchDate { get; set; }
+
     public virtual Country CountryCodeNavigation { get; set; } = null!;
 
     public virtual ICollection<InspectionRecord> InspectionRecords { get; set; } = new List<InspectionRecord>();

@@ -15,7 +15,7 @@ public partial class ShipOwner
 
     public string Phone { get; set; } = null!;
 
-    public string Adress { get; set; } = null!;
+    public string Address { get; set; } = null!;
 
     public string CountryCode { get; set; } = null!;
 

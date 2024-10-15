@@ -4,12 +4,16 @@
 *@
 
 @model IEnumerable<Ship>
-<div style="height:15px;"> </div>
-<div class="row">
+@if (Model.Count() != 0 )
+{
+    <div style="height:15px;"> </div>
+    <div class="card card-solid">
+        <div class="card-body pb-0">
+            <div class="row">
     @foreach (var ship in Model)
     {
         <div class="col-md-3">
-            <button class="card card-outline card-primary btn-block" style=" padding:0; text-align:left; background-color:transparent;" onclick="redirectToShipDetails(@ship.ShipId)">
+            <button class="card card-outline card-primary btn-block shadow" style=" padding:0; text-align:left; background-color:transparent; " onclick="redirectToShipDetails(@ship.ShipId)">
                 <img cap" alt="" style="height: 180px; width: 100%; display: block;" src="@ship.PhotoUrl" data-holder-rendered="true">
                 <div class="card-body">
                     <dl>
@@ -20,10 +24,15 @@
             </button>
         </div>
     }
-</div>
+        </div>
+        </div
+        </div>
+    
+}
 
-<script>
-    function redirectToShipDetails(shipId) {
-        window.location.href = '/Admin/ShipDetails/' + shipId;
-    }
-</script>
+
+    <script>
+        function redirectToShipDetails(shipId) {
+            window.location.href = '/Admin/ShipDetails/' + shipId;
+        }
+    </script>

@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-8 offset-md-2">
         <form id="searchForm">
-            @Html.AntiForgeryToken() <!-- CSRF token'ı buraya ekliyoruz -->
+            @Html.AntiForgeryToken() 
             <div class="input-group">
                 <input type="search" class="form-control form-control-lg" id="searchInput" autofocus onfocus="search()" onkeyup="search()" placeholder="Type Ship name, IMO Number or Owner Name">
                 <div class="input-group-append">
@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<section class="content"><div id="searchResults" class="container-fluid"></div></section>
+<section class="content"><div id="searchResults"></div></section>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
