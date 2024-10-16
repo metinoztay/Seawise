@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "OwnerProfile";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    int i = 1;
+    string ownerPhotoUrl = Model.PhotoUrl;
 }
 @model ShipOwner
 
@@ -29,9 +29,18 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-        <div class="row">
+        <div class="row">            
             <div class="col-2 text-center">
-                <img src="@Model.PhotoUrl" alt="user-avatar" class="img-circle img-fluid">
+                <img src="@Model.PhotoUrl" alt="user-avatar" id="ownerPhoto" class="img-circle img-fluid">
+                <div style="height:25px;"> </div>
+
+                <!-- Fotoğraf yükleme için gizli input -->
+                <input type="file" id="fileInput" style="display: none;" accept="image/*" />
+
+                <!-- Buton -->
+                <button type="button" class="btn btn-outline-success btn-block" id="uploadButton" hidden>
+                    <i class="fas fa-upload"></i>  Upload New Photo
+                </button>
             </div>
 
 
@@ -58,7 +67,7 @@
                     </div>
 
                 <div class="form-group">
-                    <label>Address: </label><div class="input-group">
+                    <label>Address </label><div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
                         </div>
@@ -110,24 +119,28 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-flag"></i></span>
                         </div>
-                        <select class="form-control select2bs4 select2-hidden-accessible" style="width: 80%;" data-select2-id="17" tabindex="-1" aria-hidden="true" id="ownerCountry" disabled>
-                           
+                        <select class="form-control select2bs4 select2-hidden-accessible" style="width: 80%;" id="ownerCountry" disabled>
                             @using Seawise.Data
-                            @foreach(var country in Countries.countries)
-                            {                                
-                                if(country.CountryCode == Model.CountryCode)
+                            @foreach (var country in Countries.countries)
+                            {
+                                if (country.CountryCode == Model.CountryCode)
                                 {
-                                    <option selected="selected" value="@country.CountryCode">@country.CountryName</option>
+                                    <option selected="selected" value="@country.CountryCode" data-image="/images/flags/@(country.CountryCode).svg">@country.CountryName</option>
                                 }
                                 else
                                 {
-                                    <option value="@country.CountryCode">@country.CountryName</option>
+                                    <option value="@country.CountryCode" data-image="/images/flags/@(country.CountryCode).svg">@country.CountryName</option>
                                 }
                             }
                         </select>
 
+
+
                     </div>
-                    </div>
+                 </div>
+
+
+               
                 <!-- /.form-group -->
             </div>
             <!-- /.col -->
@@ -198,7 +211,7 @@
                 $('#ownerCountry').removeAttr('disabled');
                 ownerCountry
                 // Save butonunu göster
-                $('#saveButton').removeAttr('hidden');
+                $('#saveButton,#uploadButton').removeAttr('hidden');
                 $('#editButton').attr('hidden', true);
 
             });
@@ -214,7 +227,8 @@
                     Email: $('#ownerEmail').val(),
                     Phone: $('#ownerPhone').val(),
                     Address: $('#ownerAddress').val(),
-                    CountryCode: $('#ownerCountry').val()
+                    CountryCode: $('#ownerCountry').val(),
+                    PhotoUrl: document.getElementById('ownerPhoto').src
                 };
 
 
@@ -236,7 +250,7 @@
 
                 // Save butonunu gizle
                 $('#ownerCountry').attr('disabled', true);
-                $('#saveButton').attr('hidden', true);
+                $('#saveButton,#uploadButton').attr('hidden', true);
                 $('#editButton').removeAttr('hidden');// Save butonunu gizle
             });
         });
@@ -254,5 +268,74 @@
                 theme: 'bootstrap4'
             });
         });
+
+        $(document).ready(function () {
+            $('#ownerCountry').select2({
+                theme: 'bootstrap4',
+                templateResult: formatCountry,
+                templateSelection: formatCountry
+            });
+
+            function formatCountry(country) {
+                if (!country.id) {
+                    return country.text; // Return unformatted if there's no id (for placeholder)
+                }
+
+                var countryFlag = $(country.element).data('image');
+                if (countryFlag) {
+                    var $country = $(
+                        '<span><img src="' + countryFlag + '" style="height: 15px; margin-right: 8px;" /> ' + country.text + '</span>'
+                    );
+                    return $country;
+                }
+
+                return country.text;
+            }
+        });
+
     </script>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function () {
+            document.getElementById('fileInput').click();  // Dosya seçme ekranını aç
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function () {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];  // Seçilen dosyayı al
+
+            if (file) {
+                // Dosya geçerliliğini kontrol et
+                const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!validImageTypes.includes(file.type)) {
+                    alert("Lütfen geçerli bir fotoğraf dosyası seçin (JPEG, JPG, PNG).");
+                    return;
+                }
+
+                const photoData = new FormData();
+                photoData.append('file', file);
+                photoData.append('ownerId', @Model.ShipOwnerId);
+
+                fetch('@Url.Action("UploadPhoto", "Owner")', {
+                    method: 'POST',
+                    body: photoData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.filePath) {
+                            // Sunucudan dönen dosya yolunu önizlemede göster
+                            document.getElementById('ownerPhoto').src = data.filePath;
+                        } else {
+                            alert(data.message || "Dosya yüklenirken bir hata oluştu.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert("Lütfen bir dosya seçin.");
+            }
+        });
+    </script>
+
 }
