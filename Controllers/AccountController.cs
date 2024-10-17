@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Seawise.Data;
 using Seawise.Models;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -24,6 +25,10 @@ namespace Seawise.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string swCode, string password)
         {
+            if (swCode == null || password == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             swCode = "SW" + swCode.Replace("-","");
             string hashPassword = CreateHash(password);
             var userInformations = _context.Employees.FirstOrDefault(x => x.InternalEmployeeCode == swCode && x.Password == hashPassword);
@@ -39,7 +44,10 @@ namespace Seawise.Controllers
                 ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
                 await HttpContext.SignInAsync(principal);
 
-                return RedirectToAction("Index", "Home", userInformations);
+
+                ActiveUser.activeUser = userInformations;
+
+                return RedirectToAction("Dashboard", "Admin", userInformations);
                 /*
                 if (userInformations.Authority == "Teacher")
                 {
@@ -57,9 +65,13 @@ namespace Seawise.Controllers
             return View();
         }
 
-        public IActionResult Logout()
+        //[HttpPost]
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            ActiveUser.activeUser = new Employee();
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Login", "Account");
         }
 
         public static string CreateHash(string password) //kullanıcı parolarları şifrelendiğinde kullanılacak

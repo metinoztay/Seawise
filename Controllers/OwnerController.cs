@@ -51,20 +51,19 @@ namespace Seawise.Controllers
 
 
 
-        string _uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/ownerPhotos");
+        private readonly string _uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/ownerPhotos");
         [HttpPost("UploadPhoto")]
         public async Task<IActionResult> UploadPhoto (IFormFile file, int ownerId)
         {
-            
+            // !!!yüklenen ama kaydedilmeyen dosyaların silinmesinin sağlanması gerekiyor
+
             if (file == null || file.Length == 0)
                 return BadRequest(new { message = "Lütfen bir dosya yükleyin." });
 
-            // Geçerli bir fotoğraf türü olup olmadığını kontrol edin
             var validImageTypes = new[] { "image/jpeg", "image/jpg", "image/png" };
             if (!validImageTypes.Contains(file.ContentType))
                 return BadRequest(new { message = "Please select only a valid photo file (JPEG, PNG, JPG)." });
 
-            // Dosya adını oluştur
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             var fileName = Path.GetFileName($"owner{ownerId}_{timestamp}{Path.GetExtension(file.FileName)}");
             var filePath = Path.Combine(_uploadPath, fileName);
@@ -94,13 +93,10 @@ namespace Seawise.Controllers
 
         private void DeleteOldPhoto (string photoUrl)
         {
-            // URL'den dosya adını ayıkla
+            
             var fileName = Path.GetFileName(new Uri(photoUrl).LocalPath);
-
-            // Sunucudaki dosya yolunu oluştur
             var filePath = Path.Combine(_uploadPath, fileName);
 
-            // Dosyanın var olup olmadığını kontrol et
             if (!System.IO.File.Exists(filePath))
             {
                 Console.WriteLine("Dosya bulunamadı.");
@@ -109,13 +105,11 @@ namespace Seawise.Controllers
 
             try
             {
-                // Dosyayı sil
                 System.IO.File.Delete(filePath);
                 Console.WriteLine("Dosya başarıyla silindi.");
             }
             catch (IOException ex)
             {
-                // Dosya silme işlemi sırasında bir hata meydana geldiğinde
                 Console.WriteLine("Dosya silme işlemi başarısız: " + ex.Message);
             }
         }
