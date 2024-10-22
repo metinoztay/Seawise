@@ -25,6 +25,7 @@ namespace Seawise.Controllers
         public IActionResult Details(int shipId)
         {
             var shipDetails = _context.Ships
+                .Include(s => s.ShipOwner)
                 .Include(s => s.ShipEquipments)
                 .ThenInclude(m => m.MaintenanceRecords)
                 .Include(s => s.CountryCodeNavigation)
@@ -44,7 +45,25 @@ namespace Seawise.Controllers
             ViewBag.ActiveTabId = "ShipDetails";
             return Json(new { redirectUrl = Url.Action("Profile", "Owner", new { ownerId = newShip.ShipOwnerId }) });
         
-          }
+         }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadShipProfile([FromBody] Ship newProfile)
+        {
+            Ship ship = _context.Ships.FirstOrDefault(s => s.ShipId == newProfile.ShipId);
+
+            ship.ShipName = newProfile.ShipName;
+            ship.Imonumber = "IMO" + newProfile.Imonumber;
+            ship.CountryCode = newProfile.CountryCode;
+            ship.PhotoUrl = newProfile.PhotoUrl;
+
+            _context.Entry(ship).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            ViewBag.ActiveTabId = "ShipDetails";
+            return Ok();
+
+        }
 
 
         private readonly string _uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/shipPhotos");

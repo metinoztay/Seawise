@@ -208,7 +208,7 @@
                 <div class="row">
                     <div class="col-3 text-center">
                         <img alt="" id="newShipPhoto" style="height: 180px; width: 100%; display: block;" src="https://images.pexels.com/photos/7321/sea-water-ocean-horizon.jpg?cs=srgb&dl=pexels-splash-of-rain-7321.jpg&fm=jpg" data-holder-rendered="true">
-                        <div style="height:25px;"> </div>
+                        <div style="height:24px;"> </div>
 
                         <!-- Fotoğraf yükleme için gizli input -->
                         <input type="file" id="shipPhotoInput" style="display: none;" accept="image/*">
@@ -302,10 +302,22 @@
 
                         </div>
                         <!-- /.form-group -->
-                        <div style="height: 30px"></div>
-                        <button type="button" class="btn btn-info btn-block" id="addShipButton">Save Ship Information</button>
-                        
-                        
+                        <div class="form-group" id="actionButtons">
+                            <div style="height:35px"></div>
+                            <div class="input-group date" id="launchDate" data-target-input="nearest">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn btn-info btn-block" id="addShipButton"><i class="fas fa-save"></i> Save Ship Information</button>
+                                            
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- /.form-group -->
                     </div>
                     <!-- /.col -->
@@ -331,7 +343,6 @@
 
                 $('#ownerName,#ownerPhone,#ownerAddress,#ownerEmail').removeAttr('readonly');
                 $('#ownerCountry').removeAttr('disabled');
-                ownerCountry
                 // Save butonunu göster
                 $('#saveButton,#uploadButton').removeAttr('hidden');
                 $('#editButton').attr('hidden', true);
@@ -584,7 +595,6 @@
                 });
             });
         });
-
     </script>
 
 

@@ -7,3 +7,441 @@
 <div>
     @await Html.PartialAsync("_ShipDetailsHeadMenu", Model)
 </div>
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+
+        <h3 class="card-title"><i class="fas fa-ship"></i> &nbsp; Ship Profile</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" id="saveButton" hidden="hidden">
+                <i class="fas fa-save"></i>
+            </button>
+            <button type="button" class="btn btn-tool" id="editButton">
+                <i class="fas fa-edit"></i>
+            </button>
+        </div>
+
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3 text-center">
+                <img alt="" id="newShipPhoto" style="height: 180px; width: 100%; display: block;" src="@Model.PhotoUrl" data-holder-rendered="true">
+                <div style="height:24px;"> </div>
+
+                <!-- Fotoğraf yükleme için gizli input -->
+                <input type="file" id="shipPhotoInput" style="display: none;" accept="image/*">
+
+                <!-- Buton -->
+                <button type="button" class="btn btn-outline-success btn-block" id="shipPhotoUploadButton" hidden>
+                    <i class="fas fa-upload"></i>  Upload New Photo
+                </button>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>IMO Number</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="font-weight: bold">IMO</span>
+
+                        </div>
+                        <input type="text" class="form-control" value="@Model.Imonumber.Substring(3)" id="imonumber" wfd-id="id1" readonly>
+                    </div>
+                </div>
+                <!-- /.form-group -->
+                <div class="form-group">
+                    <label>Type</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-ship"></i></span>
+                        </div>
+                        <select class="form-control select2bs4 select2-hidden-accessible" style="width: 80%;" id="shipType" disabled>
+                            @using Seawise.Data
+                            @foreach (var type in ShipTypes.shipTypes)
+                            {
+                                if (type.ShipTypeId == Model.ShipTypeId)
+                                {
+                                    <option selected value="@type.ShipTypeId">@type.ShipTypeName</option>
+                                }
+                                else
+                                {
+                                    <option value="@type.ShipTypeId">@type.ShipTypeName</option>
+                                }
+                                
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Launch Date</label>
+                    <div class="input-group date" id="launchDate" data-target-input="nearest">
+                        <div class="input-group-prepend" data-target="#launchDate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                        <input type="text" class="form-control datetimepicker-input" value="@Model.LaunchDate" data-target="#launchDate" id="launchDateInput" disabled>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-5">
+
+                <div class="form-group">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dharmachakra"></i></span>
+                            </div>
+                            <input type="text" class="form-control" value="@Model.ShipName" id="shipName" readonly>
+                        </div>
+                    </div>
+                    <!-- /.form-group -->
+                </div>
+
+                <div class="form-group">
+                    <label>Flag State</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-flag"></i></span>
+                        </div>
+                        <select class="form-control select2bs4 select2-hidden-accessible" style="width: 80%;" id="flagState" disabled>
+                            @using Seawise.Data
+                            @foreach (var country in Countries.countries)
+                            {
+                                if (country.CountryCode == Model.CountryCode)
+                                {
+                                    <option selected="selected" value="@country.CountryCode" data-image="/images/flags/@(country.CountryCode).svg">@country.CountryName</option>
+                                }
+                                else
+                                {
+                                    <option value="@country.CountryCode" data-image="/images/flags/@(country.CountryCode).svg">@country.CountryName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <!-- /.form-group -->
+
+                <div class="form-group" id="actionButtons" hidden>
+                    <div style="height:35px"></div>
+                    <div class="input-group date" id="launchDate" data-target-input="nearest">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-outline-danger btn-block" id="shipDeleteButton">
+                                        <i class="fas fa-trash"></i> Delete Ship
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                
+
+                <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+            <!-- /.col -->
+
+        </div>
+
+
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer"></div>
+</div>
+
+<div class="card card-success card-outline">
+    <div class="card-header">
+
+        <h3 class="card-title"><i class="fas fa-id-card-alt"></i> &nbsp; Ship Owner's Profile</h3>
+
+        <div class="card-tools">
+            
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2 text-center">
+                <img src="@Model.ShipOwner.PhotoUrl" alt="user-avatar" id="ownerPhoto" class="img-circle img-fluid">
+                <div style="height:25px;"> </div>
+
+                <!-- Fotoğraf yükleme için gizli input -->
+                <input type="file" id="fileInput" style="display: none;" accept="image/*" />
+
+                <!-- Buton -->
+                <button type="button" class="btn btn-outline-success btn-block" id="uploadButton" hidden>
+                    <i class="fas fa-upload"></i>  Upload New Photo
+                </button>
+            </div>
+
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label>Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-id-card"></i></span>
+                        </div>
+                        <input type="text" class="form-control" value="@Model.ShipOwner.Name" id="ownerName" readonly="readonly">
+                    </div>
+                </div>
+                <!-- /.form-group -->
+                <div class="form-group">
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="ownerPhone" value="@Model.ShipOwner.Phone" readonly="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address </label><div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
+                            </div>
+                            <textarea class="form-control" rows="3" readonly="" id="ownerAddress" style="height: 107px;">@Model.ShipOwner.Address</textarea>
+                        </div>
+
+                    </div>
+
+
+                    <!-- /.form-group -->
+                </div>
+                <!-- /.form-group -->
+            </div><div class="col-md-5">
+                <div class="form-group">
+                    <label>About</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                        </div>
+                        <input type="text" class="form-control" value="@if (Model.ShipOwner.IsPerson)
+                               {
+                        <text>This owner is an individual.</text>
+                        }
+                        else
+                        {
+                        <text>This owner is a company.</text>
+                        }" id="ownerAbout" readonly="readonly">
+                    </div>
+                </div>
+                <!-- /.form-group -->
+
+
+                <div class="form-group">
+                    <div class="form-group">
+                        <label>E-Mail</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="ownerEmail" value="@Model.ShipOwner.Email" readonly="">
+                        </div>
+                    </div>
+                    <!-- /.form-group -->
+                </div>
+
+                <div class="form-group">
+                    <label>Country</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-flag"></i></span>
+                        </div>
+                        <select class="form-control select2bs4 select2-hidden-accessible" style="width: 80%;" id="ownerCountry" disabled>
+                            @using Seawise.Data
+                            @foreach (var country in Countries.countries)
+                            {
+                                if (country.CountryCode == Model.ShipOwner.CountryCode)
+                                {
+                                    <option selected="selected" value="@country.CountryCode" data-image="/images/flags/@(country.CountryCode).svg">@country.CountryName</option>
+                                }
+                                else
+                                {
+                                    <option value="@country.CountryCode" data-image="/images/flags/@(country.CountryCode).svg">@country.CountryName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+
+                <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer"></div>
+</div>
+
+
+
+
+@section Scripts {
+
+<script>
+    $(function () {
+
+        $('.select2').select2();
+
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+    });
+
+
+    $('#launchDate').datetimepicker({
+
+        format: 'L'
+    });
+
+
+
+    $(document).ready(function () {
+        $('#ownerCountry,#flagState').select2({
+            theme: 'bootstrap4',
+            templateResult: formatCountry,
+            templateSelection: formatCountry
+        });
+
+        function formatCountry(country) {
+            if (!country.id) {
+                return country.text;
+            }
+
+            var countryFlag = $(country.element).data('image');
+            if (countryFlag) {
+                var $country = $(
+                    '<span><img src="' + countryFlag + '" style="height: 15px; margin-right: 8px;" /> ' + country.text + '</span>'
+                );
+                return $country;
+            }
+
+            return country.text;
+        }
+    });
+
+</script>
+
+    <script>
+        $(document).ready(function () {
+            // Edit butonuna tıklandığında
+            $('#editButton').click(function () {
+
+                $('#imonumber,#shipName').removeAttr('readonly');
+                $('#flagState').removeAttr('disabled');
+                // Save butonunu göster
+                $('#actionButtons,#shipPhotoUploadButton,#saveButton').removeAttr('hidden');
+                $('#editButton').attr('hidden', true);
+
+            });
+
+            // Save butonuna tıklandığında
+            $('#saveButton').click(function () {
+                $('#imonumber,#shipName').attr('readonly', true);
+                $('#flagState').attr('disabled', true);
+                $('#actionButtons,#shipPhotoUploadButton,#saveButton').attr('hidden', true);
+                $('#editButton').removeAttr('hidden');
+
+                var shipData = {
+                    ShipId: parseInt('@Model.ShipId'),
+                    ShipOwnerId: parseInt('@Model.ShipOwnerId'),
+                    ShipName: $('#shipName').val(),
+                    Imonumber: $('#imonumber').val(),
+                    CountryCode: $('#flagState').val(),
+                    PhotoUrl: document.getElementById('newShipPhoto').src
+                };
+
+
+                $.ajax({
+                    url: '@Url.Action("UploadShipProfile", "Ship")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(shipData),
+                    success: function (response) {
+                        alert('Data saved!');
+                    },
+                    error: function (error) {
+                        alert('Error saving data!');
+                    }
+                });
+
+
+            });
+        });
+
+
+    </script>
+
+    <script>
+        document.getElementById('shipPhotoUploadButton').addEventListener('click', function () {
+            document.getElementById('shipPhotoInput').click();
+        });
+
+        document.getElementById('shipPhotoInput').addEventListener('change', function () {
+            const photoInput = document.getElementById('shipPhotoInput');
+            const photo = photoInput.files[0];
+
+            if (photo) {
+
+                const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!validImageTypes.includes(photo.type)) {
+                    alert("Please select a photo which has valid extension (JPEG, JPG, PNG).");
+                    return;
+                }
+
+                const photoData = new FormData();
+                photoData.append('file', photo);
+                photoData.append('ownerId', @Model.ShipOwnerId);
+
+                fetch('@Url.Action("UploadPhoto", "Ship")', {
+                    method: 'POST',
+                    body: photoData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.filePath) {
+                            document.getElementById('newShipPhoto').src = data.filePath;
+                        } else {
+                            alert(data.message || "Dosya yüklenirken bir hata oluştu.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert("Lütfen bir dosya seçin.");
+            }
+        });
+    </script>
+}
