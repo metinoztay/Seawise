@@ -4,35 +4,28 @@
 *@
 
 @model IEnumerable<Ship>
-@if (Model.Count() != 0 )
+
+@if (Model.Count() != 0)
 {
     <div style="height:15px;"> </div>
     <div class="card card-solid">
         <div class="card-body pb-0">
             <div class="row">
-    @foreach (var ship in Model)
-    {
-        <div class="col-md-3">
-            <button class="card card-outline card-primary btn-block shadow" style=" padding:0; text-align:left; background-color:transparent; " onclick="redirectToShipDetails(@ship.ShipId)">
-                <img cap" alt="" style="height: 180px; width: 100%; display: block;" src="@ship.PhotoUrl" data-holder-rendered="true">
-                <div class="card-body">
-                    <dl>
-                        <dt>@ship.ShipName &nbsp; <img src="~/images/flags/@($"{ship.CountryCode}.svg")" style="height: 15px;" class="elevation-2" alt="User Image"> </dt>
-                        <dd>Owner: @ship.ShipOwner.Name</dd>
-                    </dl>
-                </div>
-            </button>
+                @foreach (var ship in Model)
+                {
+                    <div class="col-md-3">
+                        <a asp-controller="Ship" asp-action="Details" asp-route-shipId="@ship.ShipId" class="card card-outline card-primary btn-block shadow" style="padding:0; text-align:left; background-color:transparent;">
+                            <img alt="" style="height: 180px; width: 100%; display: block;" src="@ship.PhotoUrl" data-holder-rendered="true">
+                            <div class="card-body">
+                                <dl>
+                                    <dt>@ship.ShipName &nbsp; <img src="~/images/flags/@($"{ship.CountryCode}.svg")" style="height: 15px;" class="elevation-2" alt="Flag"> </dt>
+                                    <dd>Owner: @ship.ShipOwner.Name</dd>
+                                </dl>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
         </div>
-    }
-        </div>
-        </div
-        </div>
-    
+    </div>
 }
-
-
-    <script>
-        function redirectToShipDetails(shipId) {
-            window.location.href = '/Admin/ShipDetails/' + shipId;
-        }
-    </script>

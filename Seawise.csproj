@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Data\LoginPageItems\**" />
+    <Compile Remove="Views\Ship\**" />
     <Content Remove="Data\LoginPageItems\**" />
+    <Content Remove="Views\Ship\**" />
     <EmbeddedResource Remove="Data\LoginPageItems\**" />
+    <EmbeddedResource Remove="Views\Ship\**" />
     <None Remove="Data\LoginPageItems\**" />
+    <None Remove="Views\Ship\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,9 +29,9 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Views\Ship\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\images\ownerPhotos\" />
+    <Folder Include="wwwroot\images\shipPhotos\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\lib\bootstrap\" />
     <Folder Include="wwwroot\lib\bootstrap\dist\css\" />
@@ -40,6 +44,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Views\Ship\Details.cshtml" />
+    <Content Include="Views\Ship\List.cshtml" />
+    <Content Include="Views\Ship\_ShipDetailsHeadMenu.cshtml" />
     <None Include="wwwroot\images\flags\ad.svg" />
     <None Include="wwwroot\images\flags\ae.svg" />
     <None Include="wwwroot\images\flags\af.svg" />

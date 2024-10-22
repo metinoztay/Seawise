@@ -1,12 +1,13 @@
-﻿@{
-    ViewData["Title"] = "Ships";
+﻿
+@{
+    ViewData["Title"] = "Ship List";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="row">
     <div class="col-md-8 offset-md-2">
         <form id="searchForm">
-            @Html.AntiForgeryToken() 
+            @Html.AntiForgeryToken()
             <div class="input-group">
                 <input type="search" class="form-control form-control-lg" id="searchInput" autofocus onfocus="search()" onkeyup="search()" placeholder="Type Ship name, IMO Number or Owner Name">
                 <div class="input-group-append">
@@ -32,19 +33,20 @@
 
         $.ajax({
             url: '@Url.Action("ShipSearch", "Search")',
-            type: 'POST', 
-            contentType: 'application/x-www-form-urlencoded', 
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded',
             headers: {
-                'RequestVerificationToken': token 
+                'RequestVerificationToken': token
             },
-            data: { searchTerm: query }, 
+            data: { searchTerm: query },
             success: function (data) {
-                $('#searchResults').html(data); 
+                $('#searchResults').html(data);
             },
             error: function (xhr, status, error) {
-                console.error('Error:', error); 
+                console.error('Error:', error);
             }
         });
     }
 
 </script>
+

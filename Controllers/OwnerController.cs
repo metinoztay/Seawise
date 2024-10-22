@@ -5,6 +5,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using Microsoft.AspNetCore.Components.Forms;
+using Seawise.Data;
 
 namespace Seawise.Controllers
 {
@@ -17,14 +18,29 @@ namespace Seawise.Controllers
             _context = new Db8536Context();
         }
 
-        public IActionResult Index()
+        public IActionResult Profile(int ownerId)
         {
+            ViewBag.ActiveTabId = "OwnerProfile";
+
+            Countries.countries.Clear();
+            Countries.countries = _context.Countries.ToList();
+            ShipTypes.shipTypes.Clear();
+            ShipTypes.shipTypes = _context.ShipTypes.OrderBy(s => s.ShipTypeName).ToList();
+
+            var owner = _context.ShipOwners.Include(o => o.Ships).ThenInclude(o => o.CountryCodeNavigation).FirstOrDefault(o => o.ShipOwnerId == ownerId);
+
+            return View(owner);
+        }
+
+        public IActionResult List()
+        {
+            ViewBag.ActiveTabId = "OwnerList";
             return View();
         }
 
 
         [HttpPost]
-        public IActionResult UpdateShipOwner (ShipOwner owner)
+        public IActionResult UpdateShipOwner ([FromBody] ShipOwner owner)
         {
             if (owner.ShipOwnerId != null)
             {
@@ -41,24 +57,27 @@ namespace Seawise.Controllers
                 _context.Entry(tempOwner).State = EntityState.Modified;
                 _context.SaveChanges();
 
-                // Başarılı yanıt döndürün
                 return Json(new { success = true, message = "Data saved successfully!" });
             }
 
-            // Hata olması durumunda JSON hata mesajı döndürün
             return Json(new { success = false, message = "Error saving data!" });
         }
 
 
 
         private readonly string _uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/ownerPhotos");
-        [HttpPost("UploadPhoto")]
-        public async Task<IActionResult> UploadPhoto (IFormFile file, int ownerId)
+        [HttpPost]
+        public async Task<IActionResult> UploadPhoto(IFormFile file, int ownerId)
         {
             // !!!yüklenen ama kaydedilmeyen dosyaların silinmesinin sağlanması gerekiyor
+            if (!Directory.Exists(_uploadPath))
+            {
+                Directory.CreateDirectory(_uploadPath);
+            }
+
 
             if (file == null || file.Length == 0)
-                return BadRequest(new { message = "Lütfen bir dosya yükleyin." });
+                return BadRequest(new { message = "Please upload a file" });
 
             var validImageTypes = new[] { "image/jpeg", "image/jpg", "image/png" };
             if (!validImageTypes.Contains(file.ContentType))
@@ -87,7 +106,6 @@ namespace Seawise.Controllers
             }
             
 
-            // Yüklenen dosyanın yolunu geri döndürün
             return Ok(new { filePath = $"/images/ownerPhotos/{fileName}" });
         }
 

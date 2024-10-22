@@ -1,0 +1,76 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    // Toplam bakım kayıtlarını hesapla
+    int totalMaintenanceCount = Model.ShipEquipments.Sum(e => e.MaintenanceRecords.Count());
+}
+
+@model Ship
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>Details</h3>
+
+                <p>Ship Info</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-dharmachakra"></i>
+
+
+            </div>
+            <a asp-controller="Ship" asp-action="Details" asp-route-shipId="@Model.ShipId" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>@Model.ShipEquipments.Count()</h3>
+
+                <p>Equipments</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-satellite-dish"></i>
+            </div>
+            <a asp-controller="Ship" asp-action="Equipments" asp-route-shipId="@Model.ShipId" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>@totalMaintenanceCount</h3>
+
+                <p>Maintenence</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-wrench"></i>
+
+            </div>
+            <a asp-controller="Ship" asp-action="Maintenences" asp-route-shipId="@Model.ShipId" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>@Model.InspectionRecords.Count()</h3>
+
+                <p>Inspection</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>

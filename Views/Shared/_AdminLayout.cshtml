@@ -138,7 +138,7 @@
                         </li>
                         <li class="nav-header">SHIPS</li>
                         <li class="nav-item">
-                            <a href="@Url.Action("Ships", "Admin")" class="nav-link" id="Ships">
+                            <a href="@Url.Action("List", "Ship")" class="nav-link" id="ShipList">
                                 <i class="nav-icon fas fa-ship"></i>
                                 <p>
                                     Ship List
@@ -146,7 +146,15 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("AddShip", "Admin")" class="nav-link" id="AddShip">
+                            <a href="@Url.Action("List", "Ship")" class="nav-link" id="ShipDetails">
+                                <i class="nav-icon fas fa-columns"></i>
+                                <p>
+                                    Ship Details
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("List", "Owner")" class="nav-link" id="AddShip">
                                 <i class="nav-icon fas fa-anchor"></i>
                                 <p>
                                     Add Ship
@@ -154,16 +162,17 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="file:///C:/Users/Metin/Desktop/AdminLTE/pages/kanban.html" class="nav-link">
-                                <i class="nav-icon fas fa-columns"></i>
+                            <a href="@Url.Action("List", "Ship")" class="nav-link" id="DeleteShip">
+                                <i class="nav-icon fas fa-trash"></i>
                                 <p>
-                                    Ship Info
+                                    Delete Ship
                                 </p>
                             </a>
                         </li>
+                        
                         <li class="nav-header">SHIP OWNERS</li>
                         <li class="nav-item">
-                            <a href="@Url.Action("ShipOwners", "Admin")" class="nav-link" id="ShipOwners">
+                            <a href="@Url.Action("List", "Owner")" class="nav-link" id="OwnerList">
                                 <i class="nav-icon fas fa-address-card"></i>
                                 <p>
                                     Owners List
@@ -171,7 +180,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("ShipOwners", "Admin")" class="nav-link" id="OwnerProfile">
+                            <a href="@Url.Action("List", "Owner")" class="nav-link" id="OwnerProfile">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>
                                     Owner Profile
@@ -507,6 +516,33 @@
     <script src="~/themedata/adminlte/plugins/select2/js/select2.full.min.js"></script>
     <!-- OPTIONAL SCRIPTS -->
     <script src="~/themedata/adminlte/plugins/chart.js/Chart.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="~/themedata/adminlte/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/themedata/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/themedata/adminlte/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="~/themedata/adminlte/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/themedata/adminlte/plugins/moment/moment.min.js"></script>
+    <script src="~/themedata/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>
+    <!-- date-range-picker -->
+    <script src="~/themedata/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- bootstrap color picker -->
+    <script src="~/themedata/adminlte/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/themedata/adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Bootstrap Switch -->
+    <script src="~/themedata/adminlte/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <!-- BS-Stepper -->
+    <script src="~/themedata/adminlte/plugins/bs-stepper/js/bs-stepper.min.js"></script>
+    <!-- dropzonejs -->
+    <script src="~/themedata/adminlte/plugins/dropzone/min/dropzone.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/themedata/adminlte/dist/js/adminlte.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>

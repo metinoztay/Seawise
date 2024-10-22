@@ -21,35 +21,7 @@ namespace Seawise.Controllers
             return View();
         }
 
-        public IActionResult Ships()
-        {
-            ViewBag.ActiveTabId = "Ships";
-            return View();
-        }
-
-        public IActionResult AddShip()
-        {
-            ViewBag.ActiveTabId = "AddShip";
-            return View();
-        }
-
-        public IActionResult ShipOwners()
-        {
-            ViewBag.ActiveTabId = "ShipOwners";
-            return View();
-        }
 
         
-        public IActionResult OwnerProfile(int ownerId)
-        {
-            ViewBag.ActiveTabId = "OwnerProfile";
-
-            Countries.countries.Clear();
-            Countries.countries = _context.Countries.ToList();
-
-            var owner = _context.ShipOwners.Include(o => o.Ships).ThenInclude(o => o.CountryCodeNavigation).FirstOrDefault(o => o.ShipOwnerId == ownerId);
-            
-            return View(owner);
-        }
     }
 }
