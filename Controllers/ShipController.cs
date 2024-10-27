@@ -35,6 +35,18 @@ namespace Seawise.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> DeleteShip ([FromBody] Ship deleteShip)
+        {
+            var ship = _context.Ships.FirstOrDefault(s => s.ShipId == deleteShip.ShipId);
+            _context.Ships.Remove(ship);
+            await _context.SaveChangesAsync();
+
+            ViewBag.ActiveTabId = "OwnerProfile";
+            return Json(new { redirectUrl = Url.Action("Profile", "Owner", new { ownerId = deleteShip.ShipOwnerId }) });
+
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddNewShip([FromBody] Ship newShip)
         {
             newShip.Imonumber = "IMO" + newShip.Imonumber;
@@ -42,7 +54,7 @@ namespace Seawise.Controllers
             _context.Ships.Add(newShip);
             await _context.SaveChangesAsync();
 
-            ViewBag.ActiveTabId = "ShipDetails";
+            ViewBag.ActiveTabId = "OwnerProfile";
             return Json(new { redirectUrl = Url.Action("Profile", "Owner", new { ownerId = newShip.ShipOwnerId }) });
         
          }
