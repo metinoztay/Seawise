@@ -79,7 +79,6 @@ public partial class Db8536Context : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .IsFixedLength();
-            entity.Property(e => e.IsActiveWorker).HasColumnName("isActiveWorker");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);

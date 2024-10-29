@@ -55,5 +55,33 @@ namespace Seawise.Controllers
             return PartialView("OwnerSearchResult", owners);
         }
 
+        
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult EmployeeSearch(int departmentId, int positionId, string searchText)
+        {
+            var employeesQuery = _context.Employees.Include(e => e.EmployeePosition).ThenInclude(e => e.EmployeeDepartment).OrderBy(e => e.HireDate).AsQueryable();
+
+            if (departmentId != 0)
+            {
+                employeesQuery = employeesQuery.Where(e => e.EmployeePosition.EmployeeDepartmentId == departmentId);
+            }
+
+            if (positionId != 0)
+            {
+                employeesQuery = employeesQuery.Where(e => e.EmployeePositionId == positionId);
+            }
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                employeesQuery = employeesQuery.Where(e => EF.Functions.Like(e.Name, $"%{searchText}%") || EF.Functions.Like(e.Surname, $"%{searchText}%"));
+            }
+
+            var employees = employeesQuery.ToList();
+
+            return PartialView("EmployeeSearchResult", employees);
+        }
+        
+
     }
 }

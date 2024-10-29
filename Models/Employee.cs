@@ -25,7 +25,9 @@ public partial class Employee
 
     public int Salary { get; set; }
 
-    public bool IsActiveWorker { get; set; }
+    public DateOnly HireDate { get; set; }
+
+    public DateOnly? LeaveDate { get; set; }
 
     public virtual EmployeePosition EmployeePosition { get; set; } = null!;
 

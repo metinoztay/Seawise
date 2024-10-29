@@ -4,5 +4,132 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>List</h1>
+<div class="container-fluid">
+    <form id="searchForm">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Department:</label>
+                            <select id="departmentSelect" class="select2 select2bs4" style="width: 100%;" onchange="filterPositions()">
+                                <option value="0" selected>All Departments</option>
+                                @using Seawise.Data
+                                @foreach (var department in DepartmentPrositions.departments)
+                                {
+                                    <option value="@department.EmployeeDepartmentId">@department.DepartmentName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Position:</label>
+                            <select id="positionSelect" class="select2 select2bs4" style="width: 100%;" onchange="search()">
+                                <option value="0" selected>All Positions</option>
+                                @foreach (var position in DepartmentPrositions.positions)
+                                {
+                                    <option value="@position.EmployeePositionId" data-department-id="@position.EmployeeDepartmentId">@position.PositionName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <input type="search" class="form-control form-control-lg" id="searchInput" placeholder="Type Employee Name" autofocus onfocus="search()" onkeyup="search()">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-lg btn-default" onclick="search()">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
+<section class="content"><div id="searchResults"></div></section>
+
+
+@section Scripts {
+
+    <script>
+        // Store all positions in JavaScript
+        const allPositions = Array.from(document.getElementById('positionSelect').options).map(option => ({
+            
+            value: option.value,
+            text: option.text,
+            departmentId: option.getAttribute('data-department-id')
+        }));
+
+        function filterPositions() {            
+            const departmentId = document.getElementById('departmentSelect').value;
+            const positionSelect = document.getElementById('positionSelect');
+
+            // Clear existing options
+            positionSelect.innerHTML = '';
+
+            // Add "All Positions" option at the top
+            const allOption = document.createElement('option');
+            allOption.value = "0";
+            allOption.text = "All Positions";
+            allOption.selected = true;
+            positionSelect.appendChild(allOption);
+
+            // Filter and add positions based on selected department
+            allPositions.forEach(position => {
+                if (departmentId === "0" || position.departmentId === departmentId) {
+                    const option = document.createElement('option');
+                    option.value = position.value;
+                    option.text = position.text;
+                    positionSelect.appendChild(option);
+                }
+            });
+            search();
+        }
+    </script>
+
+    <script>
+        $(function () {
+            $('.select2').select2()
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        });
+    </script>
+
+  
+
+    <script>
+        function search() {
+            const departmentId = document.getElementById('departmentSelect').value;
+            const positionId = document.getElementById('positionSelect').value;
+            const searchText = document.getElementById('searchInput').value;
+
+            // Send AJAX request with departmentId, positionId, and searchText
+            $.ajax({
+                url: '@Url.Action("EmployeeSearch", "Search")', // Replace with your actual controller name
+                type: 'POST',
+                data: {
+                    departmentId: departmentId,
+                    positionId: positionId,
+                    searchText: searchText
+                },
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    // Update the search results div with the returned HTML from the partial view
+                    $('#searchResults').html(data);
+                },
+                error: function () {
+                    console.error('Error performing search');
+                }
+            });
+        }
+    </script>
+
+}
