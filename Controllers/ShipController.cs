@@ -5,6 +5,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using System.Reflection.Metadata;
+using Seawise.Data;
 
 namespace Seawise.Controllers
 {
@@ -24,6 +25,11 @@ namespace Seawise.Controllers
 
         public IActionResult Details(int shipId)
         {
+            Countries.countries.Clear();
+            Countries.countries = _context.Countries.ToList();
+            ShipTypes.shipTypes.Clear();
+            ShipTypes.shipTypes = _context.ShipTypes.OrderBy(s => s.ShipTypeName).ToList();
+
             var shipDetails = _context.Ships
                 .Include(s => s.ShipOwner)
                 .Include(s => s.ShipEquipments)
@@ -104,7 +110,7 @@ namespace Seawise.Controllers
 
                 image.Mutate(x => x.Resize(new ResizeOptions
                 {
-                    Mode = ResizeMode.Max,
+                    Mode = ResizeMode.Stretch,
                     Size = new Size(640, 428)
                 }));
 

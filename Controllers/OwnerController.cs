@@ -6,6 +6,7 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using Microsoft.AspNetCore.Components.Forms;
 using Seawise.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Seawise.Controllers
 {
@@ -36,6 +37,26 @@ namespace Seawise.Controllers
         {
             ViewBag.ActiveTabId = "OwnerList";
             return View();
+        }
+
+
+        public IActionResult AddOwner()
+        {
+            Countries.countries.Clear();
+            Countries.countries = _context.Countries.ToList();
+            ShipTypes.shipTypes.Clear();
+            ShipTypes.shipTypes = _context.ShipTypes.OrderBy(s => s.ShipTypeName).ToList();
+
+            ViewBag.ActiveTabId = "AddOwner";
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddOwner([FromBody] ShipOwner owner)
+        {
+            _context.ShipOwners.AddAsync(owner);
+            await _context.SaveChangesAsync();
+            return Ok(new { redirectUrl = $"/Owner/Profile?ownerId={owner.ShipOwnerId}" });
         }
 
 
@@ -70,6 +91,9 @@ namespace Seawise.Controllers
         public async Task<IActionResult> UploadPhoto(IFormFile file, int ownerId)
         {
             // !!!yüklenen ama kaydedilmeyen dosyaların silinmesinin sağlanması gerekiyor
+            if (ownerId == null)
+                ownerId = 0;
+                  
             if (!Directory.Exists(_uploadPath))
             {
                 Directory.CreateDirectory(_uploadPath);
@@ -92,7 +116,7 @@ namespace Seawise.Controllers
 
                 image.Mutate(x => x.Resize(new ResizeOptions
                 {
-                    Mode = ResizeMode.Max,
+                    Mode = ResizeMode.Stretch,
                     Size = new Size(300, 300)
                 }));
 

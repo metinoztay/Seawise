@@ -151,7 +151,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class ="nav-item">
                             <a href="@Url.Action("List", "Owner")" class="nav-link" id="AddShip">
                                 <i class="nav-icon fas fa-anchor"></i>
                                 <p>
@@ -185,12 +185,28 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("AddOwner", "Owner")" class="nav-link" id="AddOwner">
+                                <i class="nav-icon fas fa-user-plus"></i>
+                                <p>
+                                    Owner Add
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-header">EMPLOYEES</li>
                         <li class="nav-item">
                             <a href="@Url.Action("List", "Employee")" class="nav-link" id="EmployeeList">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     Employee List
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("List", "Employee")" class="nav-link" id="EmployeeDetails">
+                                <i class="nav-icon fas fa-user-cog"></i>
+                                <p>
+                                    Employee Details
                                 </p>
                             </a>
                         </li>

@@ -1,0 +1,264 @@
+﻿
+@{
+    ViewData["Title"] = "AddOwner";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card card-info card-outline">
+    <div class="card-header">
+
+        <h3 class="card-title"><i class="fas fa-user-cog"></i> &nbsp; New Owner</h3>       
+
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2 text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/5492/5492313.png" alt="user-avatar" id="ownerPhoto" class="img-circle img-fluid">
+                <div style="height:25px;"> </div>
+
+                <!-- Fotoğraf yükleme için gizli input -->
+                <input type="file" id="fileInput" style="display: none;" accept="image/*">
+
+                <!-- Buton -->
+                <button type="button" class="btn btn-outline-success btn-block" id="uploadButton">
+                    <i class="fas fa-upload"></i>  Upload Photo
+                </button>
+            </div>
+
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label>Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-id-card"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="ownerName">
+                    </div>
+                </div>
+                <!-- /.form-group -->
+                <div class="form-group">
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="ownerPhone" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address </label><div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
+                            </div>
+                            <textarea class="form-control" rows="3" id="ownerAddress" style="height: 107px;"></textarea>
+                        </div>
+
+                    </div>
+
+
+                    <!-- /.form-group -->
+                </div>
+                <!-- /.form-group -->
+            </div><div class="col-md-5">
+                <div class="form-group">
+                    <label>About</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                        </div>
+                        <select class="form-control custom-select" style="width: 80%;" id="ownerAbout"  tabindex="-1" aria-hidden="true">
+                                 <option selected value="1">Individual</option>
+                                <option value="0">Company</option>
+                            </select>
+                    </div>
+                </div>
+                <!-- /.form-group -->
+
+
+                <div class="form-group">
+                    <div class="form-group">
+                        <label>E-Mail</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="email" class="form-control" id="ownerEmail">
+                        </div>
+                    </div>
+                    <!-- /.form-group -->
+                </div>
+
+                <div class="form-group">
+                    <label>Country</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-flag"></i></span>
+                        </div>
+                        <select class="form-control select2bs4 boo select2-hidden-accessible" style="width: 80%;" id="ownerCountry" tabindex="-1" aria-hidden="true" data-select2-id="ownerCountry">
+                            @using Seawise.Data
+                            @foreach (var country in Countries.countries)
+                            {
+                               
+                                
+                                    <option value="@country.CountryCode" data-image="/images/flags/@(country.CountryCode).svg">@country.CountryName</option>
+                                
+                            }
+                        </select>
+                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div style="height:15px"></div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-info btn-block" id="addOwnerButton"><i class="fas fa-save"></i> Save Ship Information</button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer"></div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        $(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        });
+
+
+        $('#launchDate').datetimepicker({
+
+            format: 'L'
+        });
+
+
+
+        $(document).ready(function () {
+            $('#ownerCountry,#flagState').select2({
+                theme: 'bootstrap4',
+                templateResult: formatCountry,
+                templateSelection: formatCountry
+            });
+
+            function formatCountry(country) {
+                if (!country.id) {
+                    return country.text;
+                }
+
+                var countryFlag = $(country.element).data('image');
+                if (countryFlag) {
+                    var $country = $(
+                        '<span><img src="' + countryFlag + '" style="height: 15px; margin-right: 8px;" /> ' + country.text + '</span>'
+                    );
+                    return $country;
+                }
+
+                return country.text;
+            }
+        });
+
+    </script>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function () {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function () {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                // Dosya geçerliliğini kontrol et
+                const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!validImageTypes.includes(file.type)) {
+                    alert("Lütfen geçerli bir fotoğraf dosyası seçin (JPEG, JPG, PNG).");
+                    return;
+                }
+
+                const photoData = new FormData();
+                photoData.append('file', file);
+                photoData.append('ownerId', null);
+
+                fetch('@Url.Action("UploadPhoto", "Owner")', {
+                    method: 'POST',
+                    body: photoData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.filePath) {
+                            // Sunucudan dönen dosya yolunu önizlemede göster
+                            document.getElementById('ownerPhoto').src = data.filePath;
+                        } else {
+                            alert(data.message || "Dosya yüklenirken bir hata oluştu.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert("Lütfen bir dosya seçin.");
+            }
+        });
+    </script>
+
+    <script>
+        $('#addOwnerButton').click(function () {
+           
+
+            var ownerData = {
+                Name: $('#ownerName').val(),
+                Email: $('#ownerEmail').val(),
+                Phone: $('#ownerPhone').val(),
+                Address: $('#ownerAddress').val(),
+                CountryCode: $('#ownerCountry').val(),
+                PhotoUrl: document.getElementById('ownerPhoto').src
+            };
+
+            $.ajax({
+                url: '@Url.Action("AddOwner", "Owner")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(ownerData),
+                success: function (response) {
+                    window.location.href = response.redirectUrl;
+                },
+                error: function (error) {
+                    alert('Error saving data!');
+                }
+            });
+
+        });
+
+    </script>
+}
+

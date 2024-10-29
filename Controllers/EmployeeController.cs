@@ -22,9 +22,12 @@ namespace Seawise.Controllers
             return View();
         }
 
-        public IActionResult Details()
+        public IActionResult Details(int employeeId)
         {
-            return View();
+            var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == employeeId);
+
+            ViewBag.ActiveTabId = "EmployeeDetails";
+            return View(employee);
         }
         public IActionResult AddEmployee()
         {
