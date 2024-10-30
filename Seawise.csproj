@@ -46,7 +46,6 @@
   <ItemGroup>
     <Content Include="Views\Ship\Details.cshtml" />
     <Content Include="Views\Ship\List.cshtml" />
-    <Content Include="Views\Ship\_ShipDetailsHeadMenu.cshtml" />
     <None Include="wwwroot\images\flags\ad.svg" />
     <None Include="wwwroot\images\flags\ae.svg" />
     <None Include="wwwroot\images\flags\af.svg" />

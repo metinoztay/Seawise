@@ -5,7 +5,8 @@
 
 @{
     // Toplam bakım kayıtlarını hesapla
-    int totalMaintenanceCount = Model.ShipEquipments.Sum(e => e.MaintenanceRecords.Count());
+    int complatedMaintenanceCount = Model.ShipEquipments.Sum(e => e.MaintenanceRecords.Where(m => m.Status == true).Count());    
+    int plannedMaintenanceCount = Model.ShipEquipments.Sum(e => e.MaintenanceRecords.Where(m => m.Status == false).Count());
 }
 
 @model Ship
@@ -38,7 +39,7 @@
             <div class="icon">
                 <i class="fas fa-satellite-dish"></i>
             </div>
-            <a asp-controller="Ship" asp-action="Equipments" asp-route-shipId="@Model.ShipId" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a asp-controller="Equipment" asp-action="List" asp-route-shipId="@Model.ShipId" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -46,8 +47,14 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>@totalMaintenanceCount</h3>
-
+                <div class="row rx">
+                    <span>&ensp;</span>
+                    <h3>
+                        @complatedMaintenanceCount
+                    </h3>
+                    <span class="bs-stepper-circle">@plannedMaintenanceCount</span>
+                </div>
+                
                 <p>Maintenence</p>
             </div>
             <div class="icon">

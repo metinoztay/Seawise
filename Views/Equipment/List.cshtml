@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewData["Title"] = "Equipment List";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int i = 1;
+}
+
+@model Ship
+<div>
+    @await Html.PartialAsync("_ShipDetailsHeadMenu", Model)
+</div>
+
+@if (Model.ShipEquipments.Count() > 0)
+{ 
+
+    <div class="card card-info card-outline">
+    
+        <div class="card-header">
+
+            <h3 class="card-title"><i class="fas fa-anchor"></i> &ensp; Equipment List</h3>
+
+        </div>
+    <div class="card-body p-0">
+        <table class="table table-striped projects">
+            <thead>
+                <tr>
+                    <th style="width: 5%">
+                        No
+                    </th>
+                    
+                    <th style="width: 15%">
+                        Euqipment Name
+                    </th>
+                    <th style="width: 20%">
+                        Category
+                    </th>
+                    
+                        <th class="text-center">
+                        Addition Date
+                    </th>
+                        <th class="text-center">
+                            Last Maintenance
+                        </th>
+                        <th class="text-center">
+                            Next Maintenance
+                        </th>
+                    <th style="width: 8%" class="text-center">
+                        Status
+                    </th>
+                    <th style="width: 12%">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var equipment in Model.ShipEquipments)
+                {
+                    <tr>
+                        <td>
+                           @i                                     
+                        </td>
+                        
+                        <td>
+                            <a>
+                                    @equipment.EquipmentName
+                            </a>
+                           
+                        </td>
+                        <td>
+                           @equipment.ShipEquipmentCategory.CategoryName
+                        </td>
+
+                            <td class="text-center">
+                                @equipment.AdditionDate
+                        </td>
+                            <td class="text-center">
+                                @{
+                                    string lastMaintenanceDate = string.Empty;
+
+                                    // Loop through MaintenanceRecords to find the first with Status = true (or 1 if Status is an integer)
+                                    foreach (var maintenance in equipment.MaintenanceRecords)
+                                    {
+                                        if (maintenance.Status) // Change this condition if Status is a boolean or check for specific integer value
+                                        {
+                                            lastMaintenanceDate = maintenance.Time.ToShortDateString(); // Store the formatted date
+                                            break; // Exit the loop once the first valid record is found
+                                        }
+                                    }
+                                }
+
+                                @lastMaintenanceDate
+
+                                <!-- Fallback if there are no valid records -->
+                                @if (string.IsNullOrEmpty(lastMaintenanceDate))
+                                {
+                                    <p>No valid maintenance records found.</p>
+                                }
+
+
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    string plannedMaintenanceDate = string.Empty;
+
+                                    // Loop through MaintenanceRecords to find the first with Status = true (or 1 if Status is an integer)
+                                    foreach (var maintenance in equipment.MaintenanceRecords)
+                                    {
+                                        if (!maintenance.Status) // Change this condition if Status is a boolean or check for specific integer value
+                                        {
+                                            plannedMaintenanceDate = maintenance.Time.ToShortDateString(); // Store the formatted date
+                                            break; // Exit the loop once the first valid record is found
+                                        }
+                                    }
+                                }
+
+                                @plannedMaintenanceDate
+
+                                <!-- Fallback if there are no valid records -->
+                                @if (string.IsNullOrEmpty(plannedMaintenanceDate))
+                                {
+                                    <p>No valid planned maintenance found.</p>
+                                }
+                            </td>
+                        <td class="project-state">
+                            @if(equipment.Status == false)
+                            {
+                                <span class="badge badge-danger">Inactive</span>
+                            }
+                            else
+                            {
+                                 <span class="badge badge-success">Active</span>
+                            }
+                            
+                        </td>
+                        <td class="project-actions text-right">
+                                <a asp-controller="Equipment" asp-action="Details" asp-route-equipmentId="@equipment.ShipEquipmentId" class="btn btn-info btn-sm">
+                                <i class="fas fa-business-time">
+                                </i>
+                                &ensp;Details
+                            </a>
+                        </td>
+                    </tr>
+                        i++;
+                }                               
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+}
