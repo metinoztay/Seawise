@@ -15,15 +15,26 @@
     <div class="card card-info card-outline">
         <div class="card-header d-flex align-items-center">
             <h3 class="card-title"><i class="fas fa-satellite-dish"></i> &ensp; Equipment List</h3>
+            
+            
             <div class="form-group mb-0 ml-auto" style="width: auto;">
-                <label for="equipmentCategoryFilter" class="sr-only">Filter by Equipment Category:</label>
-                <select id="equipmentCategoryFilter" class="form-control form-control-sm" onchange="filterEquipmentRecords()">
-                    <option value="">All</option>
-                    @foreach (var category in Model.ShipEquipments.Select(e => e.ShipEquipmentCategory.CategoryName).Distinct())
-                    {
-                        <option value="@category">@category</option>
-                    }
-                </select>
+                <div class="row">
+                    <div class="col-5">
+                        <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-default">
+                            <i class="fas fa-plus"></i>&ensp;Add Equipment
+                        </button>
+                    </div>
+                    <div class="col-7">
+                    <select id="equipmentCategoryFilter" class="form-control form-control-sm" onchange="filterEquipmentRecords()">
+                        <option value="">All</option>
+                        @foreach (var category in Model.ShipEquipments.Select(e => e.ShipEquipmentCategory.CategoryName).Distinct())
+                        {
+                            <option value="@category">@category</option>
+                        }
+                    </select>
+                    </div>
+                </div>
+                
             </div>
         </div>
         <div class="card-body p-0">
@@ -104,10 +115,196 @@
                     }
                 </tbody>
             </table>
+
+
+
+
+            <div id="toastsContainerTopRight" class="toasts-top-right fixed"></div>
+            <!-- Modal -->
+            <div class="modal fade" id="modal-default" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add New Equipment</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-3 text-center">
+                                    <img alt="" id="newEquipmentPhoto" style="height: 180px; width: 100%; display: block;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz171ne6sTh4HzphAdMQfkXc0ORJedYLJQSA&s" data-holder-rendered="true">
+                                    <div style="height:24px;"> </div>
+
+                                    <!-- Fotoğraf yükleme için gizli input -->
+                                    <input type="file" id="newEquipmentPhotoInput" style="display: none;" accept="image/*">
+
+                                    <!-- Buton -->
+                                    <button type="button" class="btn btn-outline-success btn-block" id="newEquipmentPhotoUploadButton">
+                                        <i class="fas fa-upload"></i>  Upload Photo
+                                    </button>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-tag"></i></span>
+
+                                            </div>
+                                            <input type="text" class="form-control" id="newEquipmentName" wfd-id="id1">
+                                        </div>
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <label>Description </label><div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                                            </div>
+                                            <textarea class="form-control" rows="4" id="newEquipmentDesc" style="height: 125px;"></textarea>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-table"></i></span>
+                                            </div>
+                                            <select class="form-control select2bs4" style="width: 80%;" id="newEquipmentCategory">
+                                            @using Seawise.Data
+                                                @foreach (var category in EquipmentCategories.equipmentCategories)
+                                                {                                                   
+                                                        <option value="@category.ShipEquipmentCategoryId">@category.CategoryName</option>
+                                              
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Addition Date</label>
+                                        <div class="input-group date" id="newAdditionDate" data-target-input="nearest">
+                                            <div class="input-group-prepend" data-target="#newAdditionDate" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                            <input type="text" class="form-control datetimepicker-input" data-target="#newAdditionDate" id="newAdditionDateInput">
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend" data-target="#newStatus">
+                                                <div class="input-group-text"><i class="fa fa-check-circle"></i></div>
+                                            </div>
+                                            <select class="form-control select2bs4" style="width: 80%;" id="newStatus">
+                                                
+                                                    <option selected value="true">Active</option>
+                                                    <option value="false">Inactive</option>
+                                              
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group" id="actionButtons" hidden>
+
+                                        <div class="input-group">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#modal-default">
+                                                            <i class="fas fa-trash"></i> Delete Equipment
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!-- /.col -->
+                                <!-- /.col -->
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" id="closeButton" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" id="saveButton" class="btn btn-outline-success">SAVE</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
         </div>
         <!-- /.card-body -->
     </div>
 }
+
+@section Scripts {
+
+
+    <script>
+        $(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        });
+
+
+        $('#additionDateInput').datetimepicker({
+
+            format: 'L'
+        });
+
+
+
+        $(document).ready(function () {
+            $('#ownerCountry,#flagState').select2({
+                theme: 'bootstrap4',
+                templateResult: formatCountry,
+                templateSelection: formatCountry
+            });
+
+            function formatCountry(country) {
+                if (!country.id) {
+                    return country.text;
+                }
+
+                var countryFlag = $(country.element).data('image');
+                if (countryFlag) {
+                    var $country = $(
+                        '<span><img src="' + countryFlag + '" style="height: 15px; margin-right: 8px;" /> ' + country.text + '</span>'
+                    );
+                    return $country;
+                }
+
+                return country.text;
+            }
+        });
+
+    </script>
 
 <script>
     function filterEquipmentRecords() {
@@ -125,3 +322,77 @@
         }
     }
 </script>
+
+    <script>
+        document.getElementById('newEquipmentPhotoUploadButton').addEventListener('click', function () {
+            document.getElementById('newEquipmentPhotoInput').click();
+        });
+
+        document.getElementById('newEquipmentPhotoInput').addEventListener('change', function () {
+            const photoInput = document.getElementById('newEquipmentPhotoInput');
+            const photo = photoInput.files[0];
+
+            if (photo) {
+
+                const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!validImageTypes.includes(photo.type)) {
+                    alert("Please select a photo which has valid extension (JPEG, JPG, PNG).");
+                    return;
+                }
+
+                const photoData = new FormData();
+                photoData.append('file', photo);
+                photoData.append('equipmentId', 0);
+
+                fetch('@Url.Action("UploadPhoto", "Equipment")', {
+                    method: 'POST',
+                    body: photoData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.filePath) {
+                            document.getElementById('newEquipmentPhoto').src = data.filePath;
+                        } else {
+                            alert(data.message || "Dosya yüklenirken bir hata oluştu.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert("Lütfen bir dosya seçin.");
+            }
+        });
+    </script>
+
+    <script>
+        $('#saveButton').click(function () {
+           
+            var equipmentData = {
+                ShipId: parseInt('@Model.ShipId'),
+                ShipEquipmentId: parseInt('0'),
+                EquipmentName: $('#newEquipmentName').val(),
+                Description: $('#newEquipmentDesc').val(),
+                ShipEquipmentCategoryId: parseInt($('#newEquipmentCategory').val()),
+                AdditionDate: new Date($('#newAdditionDateInput').val()).toISOString().split('T')[0],
+                Status: JSON.parse($('#newStatus').val().toLowerCase()),
+                PhotoUrl: document.getElementById('newEquipmentPhoto').src
+            };
+
+
+
+            $.ajax({
+                url: '@Url.Action("AddNewEquipment", "Equipment")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(equipmentData),
+                success: function (response) {
+                    window.location.href = response.redirectUrl;
+                },
+                error: function (error) {
+                    alert('Error saving data!');
+                }
+            });
+        });
+    </script>
+}

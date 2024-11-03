@@ -27,6 +27,9 @@ namespace Seawise.Controllers
                     .ThenInclude(se => se.MaintenanceRecords.OrderByDescending(mr => mr.Time))
                 .FirstOrDefault(s => s.ShipId == shipId);
 
+            EquipmentCategories.equipmentCategories.Clear();
+            EquipmentCategories.equipmentCategories = _context.ShipEquipmentCategories.ToList();
+
             ViewBag.ActiveTabId = "ShipDetails";
             return View(ship);
         }
@@ -122,10 +125,35 @@ namespace Seawise.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> AddNewEquipment([FromBody] ShipEquipment equipment)
+        {
+            ShipEquipment newEquipment = new ShipEquipment();
+            newEquipment.ShipEquipmentCategoryId = equipment.ShipEquipmentCategoryId;
+            newEquipment.Status = equipment.Status;
+            newEquipment.Description = equipment.Description;
+            newEquipment.EquipmentName = equipment.EquipmentName;
+            newEquipment.PhotoUrl = equipment.PhotoUrl;
+            newEquipment.AdditionDate = equipment.AdditionDate.AddDays(1);
+            newEquipment.ShipId = equipment.ShipId;
+
+            _context.Add(newEquipment);
+            await _context.SaveChangesAsync();
+
+            ViewBag.ActiveTabId = "ShipDetails";
+            return Json(new { redirectUrl = Url.Action("Details", "Equipment", new { equipmentId = newEquipment.ShipEquipmentId }) });
+
+        }
+
+        [HttpPost]
         public async Task<IActionResult> DeleteEquipment([FromBody] ShipEquipment deleteEquipment)
         {
+            var equipment = _context.ShipEquipments.FirstOrDefault(e => e.ShipEquipmentId == deleteEquipment.ShipEquipmentId);
 
-            return Ok();
+            _context.ShipEquipments.Remove(deleteEquipment);
+            await _context.SaveChangesAsync();
+
+            return Json(new { redirectUrl = Url.Action("List", "Equipment", new { shipId = equipment.ShipId }) });
+
 
         }
 
