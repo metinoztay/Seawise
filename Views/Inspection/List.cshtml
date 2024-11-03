@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewData["Title"] = "Inspection Records";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model IEnumerable<InspectionRecord>
+
+@if (Model.Any())
+{
+    <div>
+        @await Html.PartialAsync("_ShipDetailsHeadMenu", Model.First().Ship) <!-- Assuming you want to show ship details -->
+    </div>
+
+    <div class="card card-info card-outline">
+        <div class="card-header d-flex align-items-center">
+            <h3 class="card-title"><i class="fas fa-check-circle"></i> &ensp; Inspection Records</h3>
+            <div class="form-group mb-0 ml-auto" style="width: auto;">
+                <label for="inspectionTypeFilter" class="sr-only">Filter by Inspection Type:</label>
+                <select id="inspectionTypeFilter" class="form-control form-control-sm" onchange="filterRecords()">
+                    <option value="">All</option>
+                    @foreach (var type in Model.Select(i => i.InspectionType.TypeName).Distinct())
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+
+
+        <div class="card-body p-0">
+            <!-- Dropdown for Filtering -->
+            
+
+            <table class="table table-striped projects" id="inspectionRecordsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 10%">Date</th>
+                        <th style="width: 10%">Time</th>
+                        <th style="width: 20%">Inspection Type</th>
+                        <th style="width: 20%">Findings</th>
+                        <th style="width: 20%">Participants</th>
+                        <th style="width: 12%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inspectionRecord in Model)
+                    {
+                        <tr>
+                            <td>@inspectionRecord.Time.ToShortDateString()</td>
+                            <td>@inspectionRecord.Time.ToShortTimeString()</td>
+                            <td class="inspection-type">@inspectionRecord.InspectionType.TypeName</td>
+                            
+                                <td>
+                                    @foreach (var f in @inspectionRecord.InspectionFindings)
+                                    {
+                                        if(f.Severity > 7)
+                                        {
+                                            <span class="badge badge-danger">@f.Severity</span>
+                                        }
+                                        else if (f.Severity > 4)
+                                        {
+                                            <span class="badge badge-warning">@f.Severity</span>
+                                        }
+                                        else
+                                        {
+                                        <span class="badge badge-success">@f.Severity</span>
+                                        }
+                                    }
+                            </td>
+                            <td>@foreach (var p in @inspectionRecord.InspectionParticipants)
+                                {
+                                    <span>@p.Employee.Name @p.Employee.Surname </span> <br />
+                                }
+                            </td>
+
+                            <td class="project-actions text-right">
+                                <a asp-controller="Inspection" asp-action="Details" asp-route-inspectionId="@inspectionRecord.InspectionRecordId" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i>&ensp;Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<script>
+    function filterRecords() {
+        var filterValue = document.getElementById("inspectionTypeFilter").value.toLowerCase();
+        var table = document.getElementById("inspectionRecordsTable");
+        var trs = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < trs.length; i++) { // Start from 1 to skip the header
+            var inspectionType = trs[i].getElementsByClassName("inspection-type")[0].textContent.toLowerCase();
+            if (inspectionType.includes(filterValue) || filterValue === "") {
+                trs[i].style.display = ""; // Show the row
+            } else {
+                trs[i].style.display = "none"; // Hide the row
+            }
+        }
+    }
+</script>

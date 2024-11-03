@@ -34,6 +34,7 @@ namespace Seawise.Controllers
                 .Include(s => s.ShipOwner)
                 .Include(s => s.ShipEquipments)
                 .ThenInclude(m => m.MaintenanceRecords)
+                .Include(s => s.InspectionRecords.OrderByDescending(ir => ir.Time))
                 .Include(s => s.CountryCodeNavigation)
                 .FirstOrDefault(x => x.ShipId == shipId);
             ViewBag.ActiveTabId = "ShipDetails";

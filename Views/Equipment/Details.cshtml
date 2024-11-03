@@ -1,0 +1,457 @@
+﻿
+@{
+    ViewData["Title"] = "Equipment Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model ShipEquipment
+<div>
+    @await Html.PartialAsync("_ShipDetailsHeadMenu", Model.Ship)
+</div>
+
+<div class="card card-info card-outline">
+    <div class="card-header">
+
+        <h3 class="card-title"><i class="fas fa-satellite-dish"></i></i> &nbsp; Equipment Details</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" id="saveButton" hidden="hidden">
+                <i class="fas fa-save"></i>
+            </button>
+            <button type="button" class="btn btn-tool" id="editButton">
+                <i class="fas fa-edit"></i>
+            </button>
+        </div>
+
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3 text-center">
+                <img alt="" id="equipmentPhoto" style="height: 180px; width: 100%; display: block;" src="@Model.PhotoUrl" data-holder-rendered="true">
+                <div style="height:24px;"> </div>
+
+                <!-- Fotoğraf yükleme için gizli input -->
+                <input type="file" id="equipmentPhotoInput" style="display: none;" accept="image/*">
+
+                <!-- Buton -->
+                <button type="button" class="btn btn-outline-success btn-block" id="equipmentPhotoUploadButton" hidden>
+                    <i class="fas fa-upload"></i>  Upload New Photo
+                </button>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-tag"></i></span>
+
+                        </div>
+                        <input type="text" class="form-control" value="@Model.EquipmentName" id="equipmentName" wfd-id="id1" readonly>
+                    </div>
+                </div>
+                <!-- /.form-group -->
+                <div class="form-group">
+                    <label>Description </label><div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                        </div>
+                        <textarea class="form-control" rows="4" readonly="" id="equipmentDesc" style="height: 125px;">@Model.Description</textarea>
+                    </div>
+                </div>
+                
+
+            </div>
+            
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label>Category</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-table"></i></span>
+                        </div>
+                        <select class="form-control select2bs4" style="width: 80%;" id="equipmentCategory" disabled>
+                            @using Seawise.Data
+                            @foreach (var category in EquipmentCategories.equipmentCategories)
+                            {
+                                if (category.ShipEquipmentCategoryId == Model.ShipEquipmentCategoryId)
+                                {
+                                    <option selected value="@category.ShipEquipmentCategoryId">@category.CategoryName</option>
+                                }
+                                else
+                                {
+                                    <option value="@category.ShipEquipmentCategoryId">@category.CategoryName</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Addition Date</label>
+                    <div class="input-group date" id="additionDate" data-target-input="nearest">
+                        <div class="input-group-prepend" data-target="#additionDate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                        <input type="text" class="form-control datetimepicker-input" value="@Model.AdditionDate" data-target="#additionDate" id="additionDateInput" disabled>
+                    </div>
+                </div>
+
+
+               
+                <div class="form-group">
+                    <label>Status</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend" data-target="#status">
+                            <div class="input-group-text"><i class="fa fa-check-circle"></i></div>
+                        </div>
+                        <select class="form-control select2bs4" style="width: 80%;" id="status" disabled>
+                            @if (Model.Status.Value)
+                            {
+                                <option selected value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            }
+                            else
+                            {
+                                <option value="true">Active</option>
+                                <option selected value="false">Inactive</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+                <!-- /.form-group -->
+
+                <div class="form-group" id="actionButtons" hidden>
+                    
+                    <div class="input-group">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#modal-default">
+                                        <i class="fas fa-trash"></i> Delete Equipment
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="toastsContainerTopRight" class="toasts-top-right fixed"></div>
+                <!-- Modal -->
+                <div class="modal fade" id="modal-default" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Delete Equipment Control</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>You are about to delete the equipment. Are you sure?</p>
+
+                                <div class="card-body pb-0">
+                                    <div class="row">
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-8">
+                                            <a asp-controller="Equipment" asp-action="Details" asp-route-equipmentId="@Model.ShipEquipmentId" class="card card-outline card-success btn-block shadow" style="padding:0; text-align:left; background-color:transparent;">
+                                                <img alt="" style="height: 180px; width: 100%; display: block;" src="@Model.PhotoUrl" data-holder-rendered="true">
+                                                <div class="card-body">
+                                                    <dl>
+                                                        <dt>Name: @Model.EquipmentName</dt>
+                                                        <dd>Category: @Model.ShipEquipmentCategory.CategoryName</dd>
+                                                        <dd>Addition Date: @Model.AdditionDate</dd>
+                                                        <dd>Description: @Model.Description</dd>
+                                                    </dl>
+                                                </div>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" id="closeButton" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" id="equipmentDeleteButton" class="btn btn-outline-danger">DELETE</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+                <!--toaster-->
+                <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+            <!-- /.col -->
+
+        </div>
+
+
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer"></div>
+</div>
+
+
+@if (Model.MaintenanceRecords.Count() > 0)
+{
+    <div class="card card-warning card-outline">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-wrench"></i> &ensp; Maintenance Records</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" id="togglePlanned">
+                    <i class="nav-icon far fa-circle text-warning"></i> Toggle Planned
+                </button>
+                <button type="button" class="btn btn-tool" id="toggleCompleted">
+                    <i class="nav-icon far fa-circle text-success"></i> Toggle Completed
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+
+                        <th style="width: 10%">Date</th>
+                        <th style="width: 10%">Time</th>
+                        <th style="width: 15%">Equipment Name</th>
+                        <th style="width: 20%">Category</th>
+                        <th>Description</th>
+                        <th style="width: 8%" class="text-center">Status</th>
+                        <th style="width: 12%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var maintenanceRecord in Model.MaintenanceRecords)
+                    {
+                        <tr class="maintenance-record @(maintenanceRecord.Status ? "completed" : "planned")">
+
+                            <td>@maintenanceRecord.Time.ToShortDateString()</td>
+                            <td><a> @maintenanceRecord.Time.ToShortTimeString()</a></td>
+                            <td><a>@maintenanceRecord.ShipEquipment.EquipmentName</a></td>
+                            <td>@maintenanceRecord.ShipEquipment.ShipEquipmentCategory.CategoryName</td>
+                            <td>@maintenanceRecord.Description</td>
+                            <td class="project-state">
+                                @if (!maintenanceRecord.Status)
+                                {
+                                    <span class="badge badge-warning">Planned</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">Completed</span>
+                                }
+                            </td>
+                            <td class="project-actions text-right">
+                                <a asp-controller="Maintenance" asp-action="Details" asp-route-maintenanceId="@maintenanceRecord.MaintenanceRecordId" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i>&ensp;Details
+                                </a>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+
+
+
+@section Scripts {
+
+
+    <script>
+        $(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        });
+
+
+        $('#additionDateInput').datetimepicker({
+
+            format: 'DD.MM.YYYY'
+        });
+
+
+
+        $(document).ready(function () {
+            $('#ownerCountry,#flagState').select2({
+                theme: 'bootstrap4',
+                templateResult: formatCountry,
+                templateSelection: formatCountry
+            });
+
+            function formatCountry(country) {
+                if (!country.id) {
+                    return country.text;
+                }
+
+                var countryFlag = $(country.element).data('image');
+                if (countryFlag) {
+                    var $country = $(
+                        '<span><img src="' + countryFlag + '" style="height: 15px; margin-right: 8px;" /> ' + country.text + '</span>'
+                    );
+                    return $country;
+                }
+
+                return country.text;
+            }
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Edit butonuna tıklandığında
+            $('#editButton').click(function () {
+
+                $('#equipmentName,#equipmentDesc').removeAttr('readonly');
+                $('#flagState,#equipmentCategory,#status').removeAttr('disabled');
+                // Save butonunu göster
+                $('#equipmentPhotoUploadButton,#saveButton,#actionButtons').removeAttr('hidden');
+                $('#editButton').attr('hidden', true);
+
+            });
+
+            // Save butonuna tıklandığında
+            $('#saveButton').click(function () {
+                $('#equipmentName,#equipmentDesc').attr('readonly', true);
+                $('#flagState,#equipmentCategory,#status').attr('disabled', true);
+                $('#equipmentPhotoUploadButton,#saveButton,#actionButtons').attr('hidden', true);
+                $('#editButton').removeAttr('hidden');
+
+                var equipmentData = {
+                    ShipEquipmentId: parseInt('@Model.ShipEquipmentId'),
+                    EquipmentName: $('#equipmentName').val(),
+                    Description: $('#equipmentDesc').val(),
+                    ShipEquipmentCategoryId: parseInt($('#equipmentCategory').val()),
+                    AdditionDate: $('#additionDateInput').val(),
+                    Status: JSON.parse($('#status').val().toLowerCase()),
+                    PhotoUrl: document.getElementById('equipmentPhoto').src
+                };
+
+
+
+                $.ajax({
+                    url: '@Url.Action("UpdateEquipment", "Equipment")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentData),
+                    success: function (response) {
+                        alert('Data saved!');
+                    },
+                    error: function (error) {
+                        alert('Error saving data!');
+                    }
+                });
+            });
+
+            $('#equipmentDeleteButton').click(function () {
+
+                var equipmentData = {
+                    ShipEquipmentId: parseInt('@Model.ShipEquipmentId'),
+                };
+
+
+                $.ajax({
+                    url: '@Url.Action("DeleteEquipment", "Equipment")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(equipmentData),
+                    success: function (response) {
+                        document.getElementById('closeButton').click();
+                        window.location.href = response.redirectUrl;
+                    },
+                    error: function (error) {
+                        alert('Error deleting data!');
+                    }
+                });
+
+
+            });
+
+
+
+        });
+
+
+    </script>
+
+    <script>
+        document.getElementById('equipmentPhotoUploadButton').addEventListener('click', function () {
+            document.getElementById('equipmentPhotoInput').click();
+        });
+
+        document.getElementById('equipmentPhotoInput').addEventListener('change', function () {
+            const photoInput = document.getElementById('equipmentPhotoInput');
+            const photo = photoInput.files[0];
+
+            if (photo) {
+
+                const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!validImageTypes.includes(photo.type)) {
+                    alert("Please select a photo which has valid extension (JPEG, JPG, PNG).");
+                    return;
+                }
+
+                const photoData = new FormData();
+                photoData.append('file', photo);
+                photoData.append('equipmentId', @Model.ShipEquipmentId);
+
+                fetch('@Url.Action("UploadPhoto", "Equipment")', {
+                    method: 'POST',
+                    body: photoData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.filePath) {
+                            document.getElementById('equipmentPhoto').src = data.filePath;
+                        } else {
+                            alert(data.message || "Dosya yüklenirken bir hata oluştu.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                alert("Lütfen bir dosya seçin.");
+            }
+        });
+    </script>
+
+    <script>
+
+        // Planned butonuna tıklanınca 'planned' satırları göster/gizle
+        document.getElementById("togglePlanned").addEventListener("click", function () {
+            document.querySelectorAll(".planned").forEach(row => {
+                row.style.display = row.style.display === "none" ? "" : "none";
+            });
+        });
+
+        // Completed butonuna tıklanınca 'completed' satırları göster/gizle
+        document.getElementById("toggleCompleted").addEventListener("click", function () {
+            document.querySelectorAll(".completed").forEach(row => {
+                row.style.display = row.style.display === "none" ? "" : "none";
+            });
+        });
+    </script>
+
+}

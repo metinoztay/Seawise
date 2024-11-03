@@ -11,139 +11,117 @@
 </div>
 
 @if (Model.ShipEquipments.Count() > 0)
-{ 
-
+{
     <div class="card card-info card-outline">
-    
-        <div class="card-header">
-
-            <h3 class="card-title"><i class="fas fa-anchor"></i> &ensp; Equipment List</h3>
-
+        <div class="card-header d-flex align-items-center">
+            <h3 class="card-title"><i class="fas fa-satellite-dish"></i> &ensp; Equipment List</h3>
+            <div class="form-group mb-0 ml-auto" style="width: auto;">
+                <label for="equipmentCategoryFilter" class="sr-only">Filter by Equipment Category:</label>
+                <select id="equipmentCategoryFilter" class="form-control form-control-sm" onchange="filterEquipmentRecords()">
+                    <option value="">All</option>
+                    @foreach (var category in Model.ShipEquipments.Select(e => e.ShipEquipmentCategory.CategoryName).Distinct())
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
+            </div>
         </div>
-    <div class="card-body p-0">
-        <table class="table table-striped projects">
-            <thead>
-                <tr>
-                    <th style="width: 5%">
-                        No
-                    </th>
-                    
-                    <th style="width: 15%">
-                        Euqipment Name
-                    </th>
-                    <th style="width: 20%">
-                        Category
-                    </th>
-                    
-                        <th class="text-center">
-                        Addition Date
-                    </th>
-                        <th class="text-center">
-                            Last Maintenance
-                        </th>
-                        <th class="text-center">
-                            Next Maintenance
-                        </th>
-                    <th style="width: 8%" class="text-center">
-                        Status
-                    </th>
-                    <th style="width: 12%">
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach(var equipment in Model.ShipEquipments)
-                {
+        <div class="card-body p-0">
+            <table class="table table-striped projects" id="equipmentRecordsTable">
+                <thead>
                     <tr>
-                        <td>
-                           @i                                     
-                        </td>
-                        
-                        <td>
-                            <a>
-                                    @equipment.EquipmentName
-                            </a>
-                           
-                        </td>
-                        <td>
-                           @equipment.ShipEquipmentCategory.CategoryName
-                        </td>
-
-                            <td class="text-center">
-                                @equipment.AdditionDate
-                        </td>
+                        <th style="width: 5%">No</th>
+                        <th style="width: 15%">Equipment Name</th>
+                        <th style="width: 20%">Category</th>
+                        <th class="text-center">Addition Date</th>
+                        <th class="text-center">Last Maintenance</th>
+                        <th class="text-center">Next Maintenance</th>
+                        <th style="width: 8%" class="text-center">Status</th>
+                        <th style="width: 12%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var equipment in Model.ShipEquipments)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td><a>@equipment.EquipmentName</a></td>
+                            <td class="equipment-category">@equipment.ShipEquipmentCategory.CategoryName</td>
+                            <td class="text-center">@equipment.AdditionDate</td>
                             <td class="text-center">
                                 @{
                                     string lastMaintenanceDate = string.Empty;
-
-                                    // Loop through MaintenanceRecords to find the first with Status = true (or 1 if Status is an integer)
                                     foreach (var maintenance in equipment.MaintenanceRecords)
                                     {
-                                        if (maintenance.Status) // Change this condition if Status is a boolean or check for specific integer value
+                                        if (maintenance.Status)
                                         {
-                                            lastMaintenanceDate = maintenance.Time.ToShortDateString(); // Store the formatted date
-                                            break; // Exit the loop once the first valid record is found
+                                            lastMaintenanceDate = maintenance.Time.ToShortDateString();
+                                            break;
                                         }
                                     }
                                 }
-
                                 @lastMaintenanceDate
-
-                                <!-- Fallback if there are no valid records -->
                                 @if (string.IsNullOrEmpty(lastMaintenanceDate))
                                 {
                                     <p>No valid maintenance records found.</p>
                                 }
-
-
                             </td>
                             <td class="text-center">
                                 @{
                                     string plannedMaintenanceDate = string.Empty;
-
-                                    // Loop through MaintenanceRecords to find the first with Status = true (or 1 if Status is an integer)
                                     foreach (var maintenance in equipment.MaintenanceRecords)
                                     {
-                                        if (!maintenance.Status) // Change this condition if Status is a boolean or check for specific integer value
+                                        if (!maintenance.Status)
                                         {
-                                            plannedMaintenanceDate = maintenance.Time.ToShortDateString(); // Store the formatted date
-                                            break; // Exit the loop once the first valid record is found
+                                            plannedMaintenanceDate = maintenance.Time.ToShortDateString();
+                                            break;
                                         }
                                     }
                                 }
-
                                 @plannedMaintenanceDate
-
-                                <!-- Fallback if there are no valid records -->
                                 @if (string.IsNullOrEmpty(plannedMaintenanceDate))
                                 {
                                     <p>No valid planned maintenance found.</p>
                                 }
                             </td>
-                        <td class="project-state">
-                            @if(equipment.Status == false)
-                            {
-                                <span class="badge badge-danger">Inactive</span>
-                            }
-                            else
-                            {
-                                 <span class="badge badge-success">Active</span>
-                            }
-                            
-                        </td>
-                        <td class="project-actions text-right">
+                            <td class="project-state">
+                                @if (equipment.Status == false)
+                                {
+                                    <span class="badge badge-danger">Inactive</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">Active</span>
+                                }
+                            </td>
+                            <td class="project-actions text-right">
                                 <a asp-controller="Equipment" asp-action="Details" asp-route-equipmentId="@equipment.ShipEquipmentId" class="btn btn-info btn-sm">
-                                <i class="fas fa-business-time">
-                                </i>
-                                &ensp;Details
-                            </a>
-                        </td>
-                    </tr>
+                                    <i class="fas fa-eye"></i>&ensp;Details
+                                </a>
+                            </td>
+                        </tr>
                         i++;
-                }                               
-            </tbody>
-        </table>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
     </div>
-    <!-- /.card-body -->
-</div>
 }
+
+<script>
+    function filterEquipmentRecords() {
+        var filterValue = document.getElementById("equipmentCategoryFilter").value.toLowerCase();
+        var table = document.getElementById("equipmentRecordsTable");
+        var trs = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < trs.length; i++) { // Start from 1 to skip the header
+            var equipmentCategory = trs[i].getElementsByClassName("equipment-category")[0].textContent.toLowerCase();
+            if (equipmentCategory.includes(filterValue) || filterValue === "") {
+                trs[i].style.display = ""; // Show the row
+            } else {
+                trs[i].style.display = "none"; // Hide the row
+            }
+        }
+    }
+</script>

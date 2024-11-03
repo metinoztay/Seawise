@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Maintenance List";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    
+}
+
+@model IEnumerable<MaintenanceRecord>
+@if (Model.Count() > 0)
+{
+    <div>
+        @await Html.PartialAsync("_ShipDetailsHeadMenu", Model.First().ShipEquipment.Ship)
+    </div>
+
+    <div class="card card-info card-outline">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-wrench"></i> &ensp; Maintenance Records</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" id="togglePlanned">
+                    <i class="nav-icon far fa-circle text-warning"></i> Toggle Planned
+                </button>
+                <button type="button" class="btn btn-tool" id="toggleCompleted">
+                    <i class="nav-icon far fa-circle text-success"></i> Toggle Completed
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+                        
+                        <th style="width: 10%">Date</th>
+                        <th style="width: 10%">Time</th>
+                        <th style="width: 15%">Equipment Name</th>
+                        <th style="width: 20%">Category</th>
+                        <th>Description</th>
+                        <th style="width: 8%" class="text-center">Status</th>
+                        <th style="width: 12%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var maintenanceRecord in Model)
+                    {
+                        <tr class="maintenance-record @(maintenanceRecord.Status ? "completed" : "planned")">
+                            
+                            <td>@maintenanceRecord.Time.ToShortDateString()</td>
+                            <td><a> @maintenanceRecord.Time.ToShortTimeString()</a></td>
+                            <td><a>@maintenanceRecord.ShipEquipment.EquipmentName</a></td>
+                            <td>@maintenanceRecord.ShipEquipment.ShipEquipmentCategory.CategoryName</td>
+                            <td>@maintenanceRecord.Description</td>
+                            <td class="project-state">
+                                @if (!maintenanceRecord.Status)
+                                {
+                                    <span class="badge badge-warning">Planned</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">Completed</span>
+                                }
+                            </td>
+                            <td class="project-actions text-right">
+                                <a asp-controller="Maintenance" asp-action="Details" asp-route-maintenanceId="@maintenanceRecord.MaintenanceRecordId" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i>&ensp;Details
+                                </a>
+                            </td>
+                        </tr>
+                        
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<script>
+    
+    // Planned butonuna tıklanınca 'planned' satırları göster/gizle
+    document.getElementById("togglePlanned").addEventListener("click", function () {
+        document.querySelectorAll(".planned").forEach(row => {
+            row.style.display = row.style.display === "none" ? "" : "none";
+        });
+    });
+
+    // Completed butonuna tıklanınca 'completed' satırları göster/gizle
+    document.getElementById("toggleCompleted").addEventListener("click", function () {
+        document.querySelectorAll(".completed").forEach(row => {
+            row.style.display = row.style.display === "none" ? "" : "none";
+        });
+    });
+</script>
