@@ -121,6 +121,16 @@ namespace Seawise.Controllers
             return Json(new { success = false, message = "Error saving data!" });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteEquipment([FromBody] ShipEquipment deleteEquipment)
+        {
+
+            return Ok();
+
+        }
+
+
+
         private void DeleteOldPhoto(string photoUrl)
         {
 
