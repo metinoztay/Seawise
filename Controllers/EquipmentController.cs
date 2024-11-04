@@ -136,7 +136,7 @@ namespace Seawise.Controllers
             newEquipment.AdditionDate = equipment.AdditionDate.AddDays(1);
             newEquipment.ShipId = equipment.ShipId;
 
-            _context.Add(newEquipment);
+            _context.ShipEquipments.Add(newEquipment);
             await _context.SaveChangesAsync();
 
             ViewBag.ActiveTabId = "ShipDetails";

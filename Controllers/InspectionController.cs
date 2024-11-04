@@ -23,16 +23,6 @@ namespace Seawise.Controllers
                 .OrderByDescending(i => i.Time)
                 .ToList(); ;
 
-            var completed = _context.MaintenanceRecords
-                .Include(m => m.ShipEquipment)
-                    .ThenInclude(e => e.ShipEquipmentCategory)
-                .Include(m => m.ShipEquipment)
-                    .ThenInclude(e => e.Ship)
-                    .ThenInclude(e => e.InspectionRecords).OrderByDescending(ir => ir.Time)
-                .Where(m => m.ShipEquipment.ShipId == shipId)
-                .OrderByDescending(m => m.Time)
-                .ToList();
-
             ViewBag.ActiveTabId = "ShipDetails";
             return View(inspections);
         }

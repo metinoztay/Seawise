@@ -14,25 +14,34 @@ namespace Seawise.Controllers
         }
         public IActionResult List(int shipId)
         {
+
+            // Completed MaintenanceRecords
             var completed = _context.MaintenanceRecords
                 .Include(m => m.ShipEquipment)
                     .ThenInclude(e => e.ShipEquipmentCategory)
                 .Include(m => m.ShipEquipment)
                     .ThenInclude(e => e.Ship)
-                    .ThenInclude(e => e.InspectionRecords).OrderByDescending(ir => ir.Time)                   
+                    .ThenInclude(s => s.InspectionRecords)
                 .Where(m => m.ShipEquipment.ShipId == shipId && m.Status == true)
-                .OrderByDescending(m => m.Time)          
+                .OrderByDescending(m => m.Time)
                 .ToList();
 
+            // Planned MaintenanceRecords
             var planned = _context.MaintenanceRecords
                 .Include(m => m.ShipEquipment)
                     .ThenInclude(e => e.ShipEquipmentCategory)
                 .Include(m => m.ShipEquipment)
                     .ThenInclude(e => e.Ship)
-                    .ThenInclude(e => e.InspectionRecords).OrderByDescending(ir => ir.Time)
-                .Where(m => m.ShipEquipment.ShipId == shipId && m.Status == false)  
+                    .ThenInclude(s => s.InspectionRecords)
+                .Where(m => m.ShipEquipment.ShipId == shipId && m.Status == false)
                 .OrderBy(m => m.Time)
                 .ToList();
+
+
+
+            var temp = _context.Ships
+                                  .Include(s => s.ShipEquipments)
+                                  .FirstOrDefault(s => s.ShipId == shipId);
 
             foreach (var c in completed)
             {
