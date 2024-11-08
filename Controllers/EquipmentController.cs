@@ -149,7 +149,7 @@ namespace Seawise.Controllers
         {
             var equipment = _context.ShipEquipments.FirstOrDefault(e => e.ShipEquipmentId == deleteEquipment.ShipEquipmentId);
 
-            _context.ShipEquipments.Remove(deleteEquipment);
+            _context.ShipEquipments.Remove(equipment);
             await _context.SaveChangesAsync();
 
             return Json(new { redirectUrl = Url.Action("List", "Equipment", new { shipId = equipment.ShipId }) });
