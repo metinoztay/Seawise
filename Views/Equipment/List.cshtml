@@ -10,8 +10,6 @@
     @await Html.PartialAsync("_ShipDetailsHeadMenu", Model)
 </div>
 
-@if (Model.ShipEquipments.Count() > 0)
-{
     <div class="card card-info card-outline">
         <div class="card-header d-flex align-items-center">
             <h3 class="card-title"><i class="fas fa-satellite-dish"></i> &ensp; Equipment List</h3>
@@ -257,7 +255,6 @@
         </div>
         <!-- /.card-body -->
     </div>
-}
 
 @section Scripts {
 

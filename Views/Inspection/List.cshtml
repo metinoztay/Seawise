@@ -2,15 +2,17 @@
 @{
     ViewData["Title"] = "Inspection Records";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Ship ship = ViewBag.Ship;
 }
+
+<div>
+    @await Html.PartialAsync("_ShipDetailsHeadMenu", ship) 
+</div>
 
 @model IEnumerable<InspectionRecord>
 
-@if (Model.Any())
-{
-    <div>
-        @await Html.PartialAsync("_ShipDetailsHeadMenu", Model.First().Ship) <!-- Assuming you want to show ship details -->
-    </div>
+
+    
 
     <div class="card card-info card-outline">
         <div class="card-header d-flex align-items-center">
@@ -86,7 +88,7 @@
             </table>
         </div>
     </div>
-}
+
 
 <script>
     function filterRecords() {

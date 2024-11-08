@@ -14,6 +14,17 @@ namespace Seawise.Controllers
         }
         public IActionResult List(int shipId)
         {
+            var ship = _context.Ships
+                .Include(s => s.ShipEquipments)
+                .ThenInclude(e => e.MaintenanceRecords)
+                .Include(s => s.InspectionRecords)
+                .FirstOrDefault(s => s.ShipId == shipId);
+
+            if (ship == null)
+            {
+                return NotFound();
+            }
+
             var inspections = _context.InspectionRecords
                 .Include(i => i.InspectionType)
                 .Include(i => i.InspectionFindings)
@@ -21,8 +32,10 @@ namespace Seawise.Controllers
                 .Include(m => m.Ship).ThenInclude(s => s.ShipEquipments).ThenInclude(s => s.MaintenanceRecords)
                 .Where(i => i.ShipId == shipId)
                 .OrderByDescending(i => i.Time)
-                .ToList(); ;
+                .ToList(); 
 
+
+            ViewBag.Ship = ship;
             ViewBag.ActiveTabId = "ShipDetails";
             return View(inspections);
         }
