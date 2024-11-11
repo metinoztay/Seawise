@@ -101,31 +101,32 @@ namespace Seawise.Controllers
         }
 
 
-        
 
-        // POST: Inspection/DeleteFinding
-        [HttpPost]
-        public async Task<IActionResult> DeleteFinding(int findingId)
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteFinding([FromBody] InspectionFinding deleteFinding)
         {
-            if (findingId <= 0)
-                return BadRequest("Invalid Finding ID");
-
-            var finding = await _context.InspectionFindings.FindAsync(findingId);
-
-            if (finding == null)
-                return NotFound();
+            if (deleteFinding == null || deleteFinding.InspectionFindingId <= 0)
+                return BadRequest("Invalid finding data");
 
             try
             {
+                var finding = await _context.InspectionFindings.FindAsync(deleteFinding.InspectionFindingId);
+                if (finding == null)
+                    return NotFound("Finding not found");
+
                 _context.InspectionFindings.Remove(finding);
                 await _context.SaveChangesAsync();
 
                 return Ok(new { message = "Finding deleted successfully" });
             }
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(500, "Error deleting finding");
+                Console.WriteLine($"Error: {ex.Message}");
+                return StatusCode(500, $"Error deleting finding: {ex.Message}");
             }
         }
+
+
     }
 }
