@@ -39,5 +39,93 @@ namespace Seawise.Controllers
             ViewBag.ActiveTabId = "ShipDetails";
             return View(inspections);
         }
+
+        public async Task<IActionResult> Details(int? inspectionId)
+        {
+            if (inspectionId == null)
+                return NotFound();
+
+            var inspectionRecord = await _context.InspectionRecords
+                .Include(i => i.Ship)
+                .Include(i => i.InspectionType)
+                .Include(i => i.InspectionFindings)
+                    .ThenInclude(f => f.InspectionCriteria)
+                .Include(i => i.InspectionParticipants)
+                    .ThenInclude(p => p.Employee)
+                    .ThenInclude(e => e.EmployeePosition)
+                    .ThenInclude(ep => ep.EmployeeDepartment)
+                .FirstOrDefaultAsync(m => m.InspectionRecordId == inspectionId);
+
+            if (inspectionRecord == null)
+                return NotFound();
+            ViewBag.InspectionCriteriaList = await _context.InspectionCriterias.ToListAsync();
+
+            var ship = _context.Ships
+                .Include(s => s.ShipEquipments)
+                .ThenInclude(e => e.MaintenanceRecords)
+                .Include(s => s.InspectionRecords)
+                .FirstOrDefault(s => s.ShipId == inspectionRecord.ShipId);
+
+            ViewBag.Ship = ship;
+            return View(inspectionRecord);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddFinding([FromBody] InspectionFinding newFinding)
+        {
+            if (newFinding == null || newFinding.InspectionRecordId <= 0 || newFinding.InspectionCriteriaId <= 0)
+                return BadRequest("Invalid data");
+
+            try
+            {
+                // Yeni bulgu oluştur ve veritabanına ekle
+                var finding = new InspectionFinding
+                {
+                    InspectionRecordId = newFinding.InspectionRecordId,
+                    InspectionTypeId = newFinding.InspectionTypeId,
+                    InspectionCriteriaId = newFinding.InspectionCriteriaId,
+                    Severity = newFinding.Severity,
+                    Description = newFinding.Description
+                };
+
+                _context.InspectionFindings.Add(finding);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Finding added successfully" });
+            }
+            catch
+            {
+                return StatusCode(500, "Error saving finding");
+            }
+        }
+
+
+        
+
+        // POST: Inspection/DeleteFinding
+        [HttpPost]
+        public async Task<IActionResult> DeleteFinding(int findingId)
+        {
+            if (findingId <= 0)
+                return BadRequest("Invalid Finding ID");
+
+            var finding = await _context.InspectionFindings.FindAsync(findingId);
+
+            if (finding == null)
+                return NotFound();
+
+            try
+            {
+                _context.InspectionFindings.Remove(finding);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Finding deleted successfully" });
+            }
+            catch
+            {
+                return StatusCode(500, "Error deleting finding");
+            }
+        }
     }
 }
