@@ -10,19 +10,18 @@
     @await Html.PartialAsync("_ShipDetailsHeadMenu", Model)
 </div>
 
-    <div class="card card-info card-outline">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="card-title"><i class="fas fa-satellite-dish"></i> &ensp; Equipment List</h3>
-            
-            
-            <div class="form-group mb-0 ml-auto" style="width: auto;">
-                <div class="row">
-                    <div class="col-5">
-                        <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-default">
-                            <i class="fas fa-plus"></i>&ensp;Add Equipment
-                        </button>
-                    </div>
-                    <div class="col-7">
+<div class="card card-info card-outline">
+    <div class="card-header d-flex align-items-center">
+        <h3 class="card-title"><i class="fas fa-satellite-dish"></i> &ensp; Equipment List</h3>
+
+        <div class="form-group mb-0 ml-auto" style="width: auto;">
+            <div class="row">
+                <div class="col-5" style="width: 200px;">
+                    <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-default">
+                        <i class="fas fa-plus"></i>&ensp;Add Equipment
+                    </button>
+                </div>
+                <div class="col-7" style="width: 150px;">
                     <select id="equipmentCategoryFilter" class="form-control form-control-sm" onchange="filterEquipmentRecords()">
                         <option value="">All</option>
                         @foreach (var category in Model.ShipEquipments.Select(e => e.ShipEquipmentCategory.CategoryName).Distinct())
@@ -30,11 +29,11 @@
                             <option value="@category">@category</option>
                         }
                     </select>
-                    </div>
                 </div>
-                
             </div>
         </div>
+    </div>
+
         <div class="card-body p-0">
             <table class="table table-striped projects" id="equipmentRecordsTable">
                 <thead>

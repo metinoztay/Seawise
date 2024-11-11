@@ -64,5 +64,34 @@ namespace Seawise.Controllers
             ViewBag.ActiveTabId = "ShipDetails";
             return View(planned);
         }
+
+        public async Task<IActionResult> Details(int maintenanceRecordId)
+        {
+            var maintenanceRecord = await _context.MaintenanceRecords
+                .Include(m => m.ShipEquipment)
+                    .ThenInclude(e => e.ShipEquipmentCategory)
+                .Include(m => m.MaintenanceParticipants)
+                    .ThenInclude(p => p.Employee).ThenInclude(e => e.EmployeePosition).ThenInclude(p => p.EmployeeDepartment)
+                .FirstOrDefaultAsync(m => m.MaintenanceRecordId == maintenanceRecordId);
+
+            if (maintenanceRecord == null)
+            {
+                return NotFound();
+            }
+
+            int shipId = maintenanceRecord.ShipEquipment.ShipId;
+            var ship = _context.Ships
+               .Include(s => s.ShipEquipments)
+               .ThenInclude(e => e.MaintenanceRecords)
+               .Include(s => s.InspectionRecords)
+               .FirstOrDefault(s => s.ShipId == shipId);
+
+            ViewBag.Ship = ship;
+
+            return View(maintenanceRecord);
+        }
+
+
+
     }
 }

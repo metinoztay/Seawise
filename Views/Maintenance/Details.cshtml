@@ -1,0 +1,150 @@
+﻿@model MaintenanceRecord
+
+@{
+    ViewData["Title"] = "Maintenance Record Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Ship ship = ViewBag.Ship;
+}
+
+<div>
+    @await Html.PartialAsync("_ShipDetailsHeadMenu", ship)
+</div>
+
+
+<!-- Maintenance Record Details -->
+<div class="card card-info card-outline">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-wrench"></i>&nbsp; Maintenance Record Details</h3>
+        <div class="card-tools">
+            <a asp-controller="Maintenance" asp-action="Edit" asp-route-maintenanceRecordId="@Model.MaintenanceRecordId" class="btn btn-tool">
+                <i class="fas fa-edit"></i>&nbsp; Edit
+            </a>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <!-- Equipment Details -->
+            <div class="col-md-4">
+                <h5><i class="fas fa-info-circle"></i>&nbsp; Equipment Details</h5>
+                <div class="form-group">
+                    <label>Equipment Name:</label>
+                    <input type="text" class="form-control" value="@Model.ShipEquipment.EquipmentName" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Category:</label>
+                    <input type="text" class="form-control" value="@Model.ShipEquipment.ShipEquipmentCategory.CategoryName" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea class="form-control" rows="4" readonly>@Model.ShipEquipment.Description</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <span class="badge @(Model.Status ? "badge-success" : "badge-warning")">
+                        @(Model.Status ? "Completed" : "Planned")
+                    </span>
+                </div>
+            </div>
+
+            <!-- Maintenance Details -->
+            <div class="col-md-4">
+                <h5><i class="fas fa-calendar-alt"></i>&nbsp; Maintenance Details</h5>
+                <div class="form-group">
+                    <label>Maintenance Date:</label>
+                    <input type="text" class="form-control" value="@Model.Time.ToString("dd.MM.yyyy HH:mm")" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea class="form-control" rows="4" readonly>@Model.Description</textarea>
+                </div>
+            </div>
+
+            <!-- Equipment Photo -->
+            <div class="col-md-4 text-center">
+                <h5><i class="fas fa-image"></i>&nbsp; Equipment Photo</h5>
+                <img src="@Model.ShipEquipment.PhotoUrl" alt="Equipment Photo" style="height: 200px; width: 100%; display: block;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Maintenance Participants Section -->
+@if (Model?.MaintenanceParticipants?.Any() ?? false)
+{
+    <div class="card card-warning card-outline mt-4">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-users"></i>&nbsp; Maintenance Participants</h3>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 10%">Photo</th>
+                        <th style="width: 30%">Name & Surname</th>
+                        <th style="width: 30%">Department</th>
+                        <th style="width: 30%">Position</th>
+                        <th style="width: 20%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var participant in Model.MaintenanceParticipants)
+                    {
+                        var employee = participant?.Employee;
+                        var position = employee?.EmployeePosition;
+                        var department = position?.EmployeeDepartment;
+
+                        <tr>
+                            <!-- Çalışan Fotoğrafı -->
+                            <td>
+                                @if (!string.IsNullOrEmpty(employee?.PhotoUrl))
+                                {
+                                    <img src="@employee.PhotoUrl" alt="Employee Photo" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;" />
+                                }
+                                else
+                                {
+                                    <span>No Photo</span>
+                                }
+                            </td>
+                            <!-- İsim ve Soyisim -->
+                            <td>@($"{employee?.Name ?? "N/A"} {employee?.Surname ?? "N/A"}")</td>
+                            <!-- Departman Bilgisi -->
+                            <td>@(department?.DepartmentName ?? "N/A")</td>
+                            <!-- Pozisyon Bilgisi -->
+                            <td>@(position?.PositionName ?? "N/A")</td>
+                            <!-- Profil Butonu -->
+                            <td>
+                                @if (employee != null)
+                                {
+                                    <a href="@Url.Action("Profile", "Employee", new { id = employee.EmployeeId })" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-user"></i> View Profile
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning mt-4">
+        <i class="fas fa-exclamation-circle"></i> No participants found for this maintenance record.
+    </div>
+}
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+    </script>
+}
