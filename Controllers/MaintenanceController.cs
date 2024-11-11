@@ -92,6 +92,42 @@ namespace Seawise.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateMaintenance([FromBody] MaintenanceRecord maintenance)
+        {
+            if (maintenance.MaintenanceRecordId != 0)
+            {
+                var tempRecord = await _context.MaintenanceRecords.FindAsync(maintenance.MaintenanceRecordId);
+                if (tempRecord != null)
+                {
+                    tempRecord.Description = maintenance.Description;
+                    tempRecord.Status = maintenance.Status;
+
+                    _context.Entry(tempRecord).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    return Json(new { success = true, message = "Data saved successfully!" });
+                }
+            }
+            return Json(new { success = false, message = "Error saving data!" });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMaintenance([FromBody] MaintenanceRecord deleteRecord)
+        {
+            var record = await _context.MaintenanceRecords.FindAsync(deleteRecord.MaintenanceRecordId);
+            int eq = record.ShipEquipmentId;
+            int tempshipId = _context.ShipEquipments.FirstOrDefault(e => e.ShipEquipmentId == eq).ShipId;
+
+            if (record != null)
+            {
+                _context.MaintenanceRecords.Remove(record);
+                await _context.SaveChangesAsync();
+
+                return Json(new { redirectUrl = Url.Action("List", "Maintenance", new { shipId = tempshipId }) });
+            }
+            return BadRequest(new { message = "Error deleting record!" });
+        }
 
     }
 }
