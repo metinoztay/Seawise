@@ -16,7 +16,7 @@
                             <select id="departmentSelect" class="select2 select2bs4" style="width: 100%;" onchange="filterPositions()">
                                 <option value="0" selected>All Departments</option>
                                 @using Seawise.Data
-                                @foreach (var department in DepartmentPrositions.departments)
+                                @foreach (var department in DepartmentPositions.departments)
                                 {
                                     <option value="@department.EmployeeDepartmentId">@department.DepartmentName</option>
                                 }
@@ -28,7 +28,7 @@
                             <label>Position:</label>
                             <select id="positionSelect" class="select2 select2bs4" style="width: 100%;" onchange="search()">
                                 <option value="0" selected>All Positions</option>
-                                @foreach (var position in DepartmentPrositions.positions)
+                                @foreach (var position in DepartmentPositions.positions)
                                 {
                                     <option value="@position.EmployeePositionId" data-department-id="@position.EmployeeDepartmentId">@position.PositionName</option>
                                 }

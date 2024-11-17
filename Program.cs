@@ -6,10 +6,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Logout"; 
+        options.LogoutPath = "/Account/Logout";
     });
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 
@@ -31,7 +31,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Inspection}/{action=Details}/{inspectionId=7}");
+    pattern: "{controller=Employee}/{action=Details}/{employeeId=48}");
 
 
 app.UseDeveloperExceptionPage();

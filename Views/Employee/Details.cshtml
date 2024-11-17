@@ -1,9 +1,494 @@
-﻿
+﻿@using Seawise.Data
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Employee Profile";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@model Employee
-<h1>Details: @Model.Name @Model.Surname</h1>
+@model Seawise.Models.Employee
 
+<div class="card card-success card-outline">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-id-card-alt"></i> &nbsp; Employee Profile</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" id="saveButton" hidden>
+                <i class="fas fa-save"></i>
+            </button>
+            <button type="button" class="btn btn-tool" id="editButton">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2 text-center">
+                <img src="@Model.PhotoUrl" alt="user-avatar" id="employeePhoto" class="img-circle img-fluid">
+                <div style="height:25px;"></div>
+
+                <!-- Fotoğraf yükleme için gizli input -->
+                <input type="file" id="fileInput" style="display: none;" accept="image/*" />
+
+                <!-- Buton -->
+                <button type="button" class="btn btn-outline-success btn-block" id="uploadButton"
+                    style="display: none;">
+                    <i class="fas fa-upload"></i> Upload New Photo
+                </button>
+            </div>
+
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Employee Code</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="@Model.InternalEmployeeCode"
+                                    id="employeeCode" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-id-card"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="@Model.Name @Model.Surname"
+                                    id="employeeName" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                </div>
+                                <select class="form-control select2" id="employeeDepartment" disabled="disabled">
+                                    @foreach (var dept in DepartmentPositions.departments)
+                                    {
+                                        @if (dept.EmployeeDepartmentId == Model.EmployeePosition.EmployeeDepartmentId)
+                                        {
+                                            <option selected value="@dept.EmployeeDepartmentId">@dept.DepartmentName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@dept.EmployeeDepartmentId">@dept.DepartmentName</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Position</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                </div>
+                                <select class="form-control select2" id="employeePosition" disabled="disabled">
+                                    @foreach (var pos in Seawise.Data.DepartmentPositions.positions)
+                                    {
+                                        @if (pos.EmployeePositionId == Model.EmployeePositionId)
+                                        {
+                                            <option selected value="@pos.EmployeePositionId">@pos.PositionName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@pos.EmployeePositionId">@pos.PositionName</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="employeePhone" value="@Model.Phone"
+                                    readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="employeeEmail" value="@Model.Email"
+                                    readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Salary</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="@Model.Salary.ToString()"
+                                    id="employeeSalary" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Hire Date</label>
+                            <div class="input-group date" id="employeeHireDate" data-target-input="nearest">
+                                <div class="input-group-prepend" data-target="#employeeHireDate"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <input type="text" class="form-control datetimepicker-input"
+                                    data-target="#employeeHireDate" id="employeeHireDateInput"
+                                    value="@Model.HireDate.ToString("dd/MM/yyyy")" disabled>
+                            </div>
+                        </div>
+                        <script>
+                            $(function () {
+                                $('#employeeHireDate').datetimepicker({
+                                    format: 'DD/MM/YYYY'
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+
+                <div class="row" id="leaveDateRow" style="display: none;">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Leave Date</label>
+                            <div class="input-group date" id="leaveDate" data-target-input="nearest">
+                                <div class="input-group-prepend" data-target="#leaveDate" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <input type="text" class="form-control datetimepicker-input" data-target="#leaveDate"
+                                       id="leaveDateInput" value="@Model.LeaveDate?.ToString("dd/MM/yyyy")" disabled>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+    </div>
+</div>
+
+@if (ViewBag.InspectionRecords != null && ViewBag.InspectionRecords.Count > 0)
+{
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-search"></i> &ensp; Inspection Records</h3>
+            <div class="card-tools">
+                
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 10%">Date</th>
+                        <th style="width: 10%">Time</th>
+                        <th style="width: 15%">Inspection Type</th>
+                        <th style="width: 15%">Ship</th>
+                        <th style="width: 15%">Ship Type</th>
+                        
+                        <th style="width: 12%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inspectionRecord in ViewBag.InspectionRecords)
+                    {
+                        <tr>
+                            <td>@inspectionRecord.Time.ToShortDateString()</td>
+                            <td>@inspectionRecord.Time.ToShortTimeString()</td>
+                            <td>@inspectionRecord.InspectionType.TypeName</td>
+                            <td>@inspectionRecord.Ship.ShipName</td>
+                            <td>@inspectionRecord.Ship.ShipType.ShipTypeName</td>
+                            
+                            <td class="project-actions text-right">
+                                <a asp-controller="Inspection" asp-action="Details" asp-route-inspectionId="@inspectionRecord.InspectionRecordId" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@if (ViewBag.MaintenanceRecords != null && ViewBag.MaintenanceRecords.Count > 0)
+{
+    <div class="card card-warning card-outline">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-wrench"></i> &ensp; Maintenance Records</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" id="togglePlanned">
+                    <i class="nav-icon far fa-circle text-warning"></i> Toggle Planned
+                </button>
+                <button type="button" class="btn btn-tool" id="toggleCompleted">
+                    <i class="nav-icon far fa-circle text-success"></i> Toggle Completed
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 8%">Date</th>
+                        <th style="width: 5%">Time</th>
+                        <th style="width: 10%">Ship</th>
+                        <th style="width: 10%">Ship Type</th>
+                        <th style="width: 10%">Equipment Name</th>
+                        <th style="width: 12%">Category</th>
+                        <th>Description</th>
+                        <th style="width: 8%" class="text-center">Status</th>
+                        <th style="width: 12%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var maintenanceRecord in ViewBag.MaintenanceRecords)
+                    {
+                        <tr class="maintenance-record @(maintenanceRecord.Status ? "completed" : "planned")">
+                            <td>@maintenanceRecord.Time.ToShortDateString()</td>
+                            <td>@maintenanceRecord.Time.ToShortTimeString()</td>
+                            <td>@maintenanceRecord.ShipEquipment.Ship.ShipName</td>
+                            <td>@maintenanceRecord.ShipEquipment.Ship.ShipType.ShipTypeName</td>
+                            <td>@maintenanceRecord.ShipEquipment.EquipmentName</td>
+                            <td>@maintenanceRecord.ShipEquipment.ShipEquipmentCategory.CategoryName</td>
+                            <td>@maintenanceRecord.Description</td>
+                            <td class="project-state">
+                                @if (maintenanceRecord.Status)
+                                {
+                                    <span class="badge badge-success">Completed</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning">Planned</span>
+                                }
+                            </td>
+                            <td class="project-actions text-right">
+                                <a asp-controller="Maintenance" asp-action="Details" asp-route-maintenanceRecordId="@maintenanceRecord.MaintenanceRecordId" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+
+
+@section Scripts {
+
+    <script>
+
+        $(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        });
+
+
+        $('#leaveDate').datetimepicker({
+
+            format: 'L'
+        });
+    
+    </script>
+
+    <script>
+        
+        $(document).ready(function () {
+            $('#togglePlanned').click(function () {
+                $('.maintenance-record').each(function () {
+                    if ($(this).hasClass('planned')) {
+                        $(this).toggle();
+                    }
+                });
+
+               
+            });
+
+            $('#toggleCompleted').click(function () {
+                $('.maintenance-record').each(function () {
+                    if ($(this).hasClass('completed')) {
+                        $(this).toggle();
+                    }
+                });
+
+            });
+        });
+
+    
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            if ('@Model.LeaveDate' != '') {
+                $('#leaveDateRow').show(); // 'Leave Date' alanını göster
+            }
+
+            $('#editButton').click(function () {
+                // Diğer alanları düzenlenebilir yap
+                $('#employeeDepartment').prop('disabled', false);
+                $('#employeePosition').prop('disabled', false);
+                $('#employeePhone').prop('readonly', false);
+                $('#employeeEmail').prop('readonly', false);
+                $('#employeeSalary').prop('readonly', false);
+                $('#leaveDateInput').removeAttr("disabled");
+                $('#leaveDate').prop('readonly', false); // Leave Date alanını da düzenlenebilir yap
+                $('#uploadButton').show();
+
+                // Leave Date alanını görünür yap
+                $('#leaveDateRow').show();
+                $('#saveButton').removeAttr("hidden");  // Save butonunu göster
+                $('#editButton').hide();  // Edit butonunu gizle
+            });
+
+            $('#saveButton').click(function () {
+                $('#editButton').show();
+                // Alanları tekrar yalnızca okunabilir hale getir
+                $('#employeeDepartment').prop('disabled', true);
+                $('#employeePosition').prop('disabled', true);
+                $('#employeePhone').prop('readonly', true);
+                $('#employeeEmail').prop('readonly', true);
+                $('#employeeSalary').prop('readonly', true);
+                $('#employeeHireDateInput').prop('readonly', true);
+                $('#employeeLeaveDate').prop('readonly', true);
+                $('#uploadButton').hide();
+                $('#saveButton').attr('hidden', true);
+                $('#editButton').removeAttr('hidden');
+
+              
+                // Formdaki verileri topla
+                var employeeData = {
+                    EmployeeId: parseInt('@Model.EmployeeId'),
+                    
+                    EmployeePositionId: $('#employeePosition').val(),
+                    Phone: $('#employeePhone').val(),
+                    Email: $('#employeeEmail').val(),
+                    Salary: parseInt($('#employeeSalary').val()),
+                    //HireDate: $('#employeeHireDateInput').val(),
+                    LeaveDate: ($('#leaveDateInput').val() ? new Date($('#leaveDateInput').val()).toISOString().split('T')[0] : null),
+
+                    PhotoUrl: document.getElementById('employeePhoto').src
+                };
+
+                // AJAX isteği
+                $.ajax({
+                    url: '@Url.Action("UpdateEmployee", "Employee")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(employeeData),
+                    success: function (response) {
+                        alert("Employee data saved successfully!");
+                    },
+                    error: function (error) {
+                        alert('Error saving employee data!');
+                    }
+                });
+            });
+
+
+            $('#uploadButton').click(function () {
+                $('#fileInput').click();  // Trigger file input when the upload button is clicked
+            });
+
+            // Handle the file input change event
+            $('#fileInput').change(function () {
+                const fileInput = document.getElementById('fileInput');
+                const file = fileInput.files[0];
+
+                if (file) {
+                    // Dosya geçerliliğini kontrol et
+                    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                    if (!validImageTypes.includes(file.type)) {
+                        alert("Lütfen geçerli bir fotoğraf dosyası seçin (JPEG, JPG, PNG).");
+                        return;
+                    }
+
+                    const photoData = new FormData();
+                    photoData.append('file', file);
+                    photoData.append('employeeId', @Model.EmployeeId);
+
+                    fetch('@Url.Action("UploadPhoto", "Employee")', {
+                        method: 'POST',
+                        body: photoData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.filePath) {
+                                // Sunucudan dönen dosya yolunu önizlemede göster
+                                document.getElementById('employeePhoto').src = data.filePath;
+                            } else {
+                                alert(data.message || "Dosya yüklenirken bir hata oluştu.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    alert("Lütfen bir dosya seçin.");
+                }
+            });
+
+            // Initialize select2 for Department and Position
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+        });
+    </script>
+}
