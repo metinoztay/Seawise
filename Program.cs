@@ -31,7 +31,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Employee}/{action=Details}/{employeeId=48}");
+    pattern: "{controller=Ship}/{action=List}");
 
 
 app.UseDeveloperExceptionPage();

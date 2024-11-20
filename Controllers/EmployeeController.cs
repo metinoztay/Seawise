@@ -52,15 +52,37 @@ namespace Seawise.Controllers
                 return NotFound(); // Eğer çalışan bulunamazsa hata dön
             }
 
+            ViewBag.ActiveTabId = "EmployeeDetails";
             return View(employee);
         }
 
         public IActionResult AddEmployee()
         {
+            Random random = new Random();
+            int code = random.Next(10000000, 99999999);
+
+            while (_context.Employees.Any(e => e.InternalEmployeeCode == ("SW" + code)))
+            {
+                code = random.Next(10000000, 99999999);
+            }
+             
+            ViewBag.InternalEmployeeCode = code.ToString();  
             ViewBag.ActiveTabId = "AddEmployee";
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddNewEmployee([FromBody] Employee newEmployee)
+        {
+            
+            newEmployee.InternalEmployeeCode = "SW" + newEmployee.InternalEmployeeCode;
+            newEmployee.HireDate = newEmployee.HireDate.AddDays(1);
+            newEmployee.Password = newEmployee.Phone;
+            _context.Employees.Add(newEmployee);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { redirectUrl = $"/Employee/Details?employeeId={newEmployee.EmployeeId}" });
+        }
 
         [HttpPost]
         public IActionResult UpdateEmployee([FromBody] Employee employeeData)

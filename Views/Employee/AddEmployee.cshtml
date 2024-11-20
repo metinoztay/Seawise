@@ -1,373 +1,288 @@
-﻿
+﻿@using Seawise.Data
 @{
     ViewData["Title"] = "Add Employee";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 
-    <div class="card card-info card-outline">
-        <div class="card-header">
+<div class="card card-success card-outline">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-id-card-alt"></i> &nbsp; New Employee Profile</h3>
 
-            <h3 class="card-title"><i class="fas fa-user-cog"></i> &nbsp; New Empployee</h3>
+    </div>
 
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" id="saveButton" hidden="hidden">
-                    <i class="fas fa-save"></i>
-                </button>
-                <button type="button" class="btn btn-tool" id="editButton">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2 text-center">
+                <img src="https://st4.depositphotos.com/9998432/24428/v/450/depositphotos_244284796-stock-illustration-person-gray-photo-placeholder-man.jpg" alt="user-avatar" id="employeePhoto" class="img-circle img-fluid">
+                <div style="height:25px;"></div>
+
+                <!-- Fotoğraf yükleme için gizli input -->
+                <input type="file" id="fileInput" style="display: none;" accept="image/*" />
+
+                <!-- Buton -->
+                <button type="button" class="btn btn-outline-success btn-block" id="uploadButton"
+                >
+                    <i class="fas fa-upload"></i> Upload Photo
                 </button>
             </div>
 
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body">
-            <div class="row">
-                <div class="col-2 text-center">
-                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="user-avatar" id="ownerPhoto" class="img-circle img-fluid">
-                    <div style="height:25px;"> </div>
-
-                    <!-- Fotoğraf yükleme için gizli input -->
-                    <input type="file" id="fileInput" style="display: none;" accept="image/*">
-
-                    <!-- Buton -->
-                    <button type="button" class="btn btn-outline-success btn-block" id="uploadButton" hidden="">
-                        <i class="fas fa-upload"></i>  Upload New Photo
-                    </button>
-                </div>
-
-
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="far fa-id-card"></i></span>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6">
+                        
+                            <div class="form-group">
+                                <label>Name</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-id-card"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control"
+                                           id="employeeName">
+                                </div>
                             </div>
-                            <input type="text" class="form-control" value="Mike E. Gainer" id="ownerName" readonly="readonly">
+                        
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Surname</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-id-card"></i></span>
+                                </div>
+                                <input type="text" class="form-control"
+                                id="employeeSurname">
+                            </div>
                         </div>
                     </div>
-                    <!-- /.form-group -->
-                    <div class="form-group">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Employee Code</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span><b>SW</b></span>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control"
+                                       id="employeeCode" value="@ViewBag.InternalEmployeeCode" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Position</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                </div>
+                                <select class="form-control select2" id="employeePosition">
+                                    @foreach (var pos in Seawise.Data.DepartmentPositions.positions)
+                                    {
+                                        if (pos.EmployeePositionId == 1)
+                                            continue;
+
+                                        <option value="@pos.EmployeePositionId">@pos.PositionName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Phone</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="ownerPhone" value="(1)757-489-0297" readonly="">
+                                <input type="text" class="form-control" id="employeePhone"
+                                       >
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Address </label><div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
-                                </div>
-                                <textarea class="form-control" rows="3" readonly="" id="ownerAddress" style="height: 107px;">3063 Murry Street
-Norfolk, VA 23505</textarea>
-                            </div>
-
-                        </div>
-
-
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.form-group -->
-                </div><div class="col-md-5">
-                    <div class="form-group">
-                        <label>About</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
-                            </div>
-                            <input type="text" class="form-control" value="This owner is an individual." id="ownerAbout" readonly="readonly">
                         </div>
                     </div>
-                    <!-- /.form-group -->
 
-
-                    <div class="form-group">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label>E-Mail</label>
+                            <label>Email</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="ownerEmail" value="MikeEGainer@rhyta.com" readonly="">
+                                <input type="text" class="form-control" id="employeeEmail"
+                                      >
                             </div>
                         </div>
-                        <!-- /.form-group -->
                     </div>
-
-                    <div class="form-group">
-                        <label>Country</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-flag"></i></span>
-                            </div>
-                            <select class="form-control select2bs4 select2-hidden-accessible" style="width: 80%;" id="ownerCountry" disabled="" tabindex="-1" aria-hidden="true" data-select2-id="ownerCountry">
-                                <option value="AD" data-image="/images/flags/AD.svg">Andorra</option>
-                                <option value="AE" data-image="/images/flags/AE.svg">United Arab Emirates</option>
-                                <option value="AF" data-image="/images/flags/AF.svg">Afghanistan</option>
-                                <option value="AG" data-image="/images/flags/AG.svg">Antigua and Barbuda</option>
-                                <option value="AL" data-image="/images/flags/AL.svg">Albania</option>
-                                <option value="AM" data-image="/images/flags/AM.svg">Armenia</option>
-                                <option value="AO" data-image="/images/flags/AO.svg">Angola</option>
-                                <option value="AR" data-image="/images/flags/AR.svg">Argentina</option>
-                                <option value="AS" data-image="/images/flags/AS.svg">American Samoa</option>
-                                <option value="AT" data-image="/images/flags/AT.svg">Austria</option>
-                                <option value="AU" data-image="/images/flags/AU.svg">Australia</option>
-                                <option value="AW" data-image="/images/flags/AW.svg">Aruba</option>
-                                <option value="AZ" data-image="/images/flags/AZ.svg">Azerbaijan</option>
-                                <option value="BA" data-image="/images/flags/BA.svg">Bosnia and Herzegovina</option>
-                                <option value="BB" data-image="/images/flags/BB.svg">Barbados</option>
-                                <option value="BD" data-image="/images/flags/BD.svg">Bangladesh</option>
-                                <option value="BE" data-image="/images/flags/BE.svg">Belgium</option>
-                                <option value="BF" data-image="/images/flags/BF.svg">Burkina Faso</option>
-                                <option value="BG" data-image="/images/flags/BG.svg">Bulgaria</option>
-                                <option value="BH" data-image="/images/flags/BH.svg">Bahrain</option>
-                                <option value="BI" data-image="/images/flags/BI.svg">Burundi</option>
-                                <option value="BJ" data-image="/images/flags/BJ.svg">Benin</option>
-                                <option value="BL" data-image="/images/flags/BL.svg">Saint Barthélemy</option>
-                                <option value="BN" data-image="/images/flags/BN.svg">Brunei Darussalam</option>
-                                <option value="BO" data-image="/images/flags/BO.svg">Bolivia</option>
-                                <option value="BQ" data-image="/images/flags/BQ.svg">Bonaire, Sint Eustatius and Saba</option>
-                                <option value="BR" data-image="/images/flags/BR.svg">Brazil</option>
-                                <option value="BS" data-image="/images/flags/BS.svg">Bahamas</option>
-                                <option value="BT" data-image="/images/flags/BT.svg">Bhutan</option>
-                                <option value="BW" data-image="/images/flags/BW.svg">Botswana</option>
-                                <option value="BY" data-image="/images/flags/BY.svg">Belarus</option>
-                                <option value="BZ" data-image="/images/flags/BZ.svg">Belize</option>
-                                <option value="CA" data-image="/images/flags/CA.svg">Canada</option>
-                                <option value="CD" data-image="/images/flags/CD.svg">Congo (Democratic Republic of the)</option>
-                                <option value="CF" data-image="/images/flags/CF.svg">Central African Republic</option>
-                                <option value="CG" data-image="/images/flags/CG.svg">Congo</option>
-                                <option value="CH" data-image="/images/flags/CH.svg">Switzerland</option>
-                                <option value="CL" data-image="/images/flags/CL.svg">Chile</option>
-                                <option value="CM" data-image="/images/flags/CM.svg">Cameroon</option>
-                                <option value="CN" data-image="/images/flags/CN.svg">China</option>
-                                <option value="CO" data-image="/images/flags/CO.svg">Colombia</option>
-                                <option value="CR" data-image="/images/flags/CR.svg">Costa Rica</option>
-                                <option value="CU" data-image="/images/flags/CU.svg">Cuba</option>
-                                <option value="CV" data-image="/images/flags/CV.svg">Cabo Verde</option>
-                                <option value="CW" data-image="/images/flags/CW.svg">Curaçao</option>
-                                <option value="CY" data-image="/images/flags/CY.svg">Cyprus</option>
-                                <option value="CZ" data-image="/images/flags/CZ.svg">Czechia</option>
-                                <option value="DE" data-image="/images/flags/DE.svg">Germany</option>
-                                <option value="DJ" data-image="/images/flags/DJ.svg">Djibouti</option>
-                                <option value="DK" data-image="/images/flags/DK.svg">Denmark</option>
-                                <option value="DM" data-image="/images/flags/DM.svg">Dominica</option>
-                                <option value="DO" data-image="/images/flags/DO.svg">Dominican Republic</option>
-                                <option value="DZ" data-image="/images/flags/DZ.svg">Algeria</option>
-                                <option value="EC" data-image="/images/flags/EC.svg">Ecuador</option>
-                                <option value="EE" data-image="/images/flags/EE.svg">Estonia</option>
-                                <option value="EG" data-image="/images/flags/EG.svg">Egypt</option>
-                                <option value="EH" data-image="/images/flags/EH.svg">Western Sahara</option>
-                                <option value="ER" data-image="/images/flags/ER.svg">Eritrea</option>
-                                <option value="ES" data-image="/images/flags/ES.svg">Spain</option>
-                                <option value="ET" data-image="/images/flags/ET.svg">Ethiopia</option>
-                                <option value="FI" data-image="/images/flags/FI.svg">Finland</option>
-                                <option value="FJ" data-image="/images/flags/FJ.svg">Fiji</option>
-                                <option value="FK" data-image="/images/flags/FK.svg">Falkland Islands (Malvinas)</option>
-                                <option value="FM" data-image="/images/flags/FM.svg">Micronesia (Federated States of)</option>
-                                <option value="FO" data-image="/images/flags/FO.svg">Faroe Islands</option>
-                                <option value="FR" data-image="/images/flags/FR.svg">France</option>
-                                <option value="GA" data-image="/images/flags/GA.svg">Gabon</option>
-                                <option value="GB" data-image="/images/flags/GB.svg">United Kingdom of Great Britain and Northern Ireland</option>
-                                <option value="GD" data-image="/images/flags/GD.svg">Grenada</option>
-                                <option value="GE" data-image="/images/flags/GE.svg">Georgia</option>
-                                <option value="GG" data-image="/images/flags/GG.svg">Guernsey</option>
-                                <option value="GH" data-image="/images/flags/GH.svg">Ghana</option>
-                                <option value="GI" data-image="/images/flags/GI.svg">Gibraltar</option>
-                                <option value="GL" data-image="/images/flags/GL.svg">Greenland</option>
-                                <option value="GM" data-image="/images/flags/GM.svg">Gambia</option>
-                                <option value="GN" data-image="/images/flags/GN.svg">Guinea</option>
-                                <option value="GP" data-image="/images/flags/GP.svg">Guadeloupe</option>
-                                <option value="GQ" data-image="/images/flags/GQ.svg">Equatorial Guinea</option>
-                                <option value="GR" data-image="/images/flags/GR.svg">Greece</option>
-                                <option value="GS" data-image="/images/flags/GS.svg">South Georgia and the South Sandwich Islands</option>
-                                <option value="GT" data-image="/images/flags/GT.svg">Guatemala</option>
-                                <option value="GU" data-image="/images/flags/GU.svg">Guam</option>
-                                <option value="GW" data-image="/images/flags/GW.svg">Guinea-Bissau</option>
-                                <option value="GY" data-image="/images/flags/GY.svg">Guyana</option>
-                                <option value="HK" data-image="/images/flags/HK.svg">Hong Kong</option>
-                                <option value="HM" data-image="/images/flags/HM.svg">Heard Island and McDonald Islands</option>
-                                <option value="HN" data-image="/images/flags/HN.svg">Honduras</option>
-                                <option value="HR" data-image="/images/flags/HR.svg">Croatia</option>
-                                <option value="HT" data-image="/images/flags/HT.svg">Haiti</option>
-                                <option value="HU" data-image="/images/flags/HU.svg">Hungary</option>
-                                <option value="ID" data-image="/images/flags/ID.svg">Indonesia</option>
-                                <option value="IE" data-image="/images/flags/IE.svg">Ireland</option>
-                                <option value="IL" data-image="/images/flags/IL.svg">Israel</option>
-                                <option value="IM" data-image="/images/flags/IM.svg">Isle of Man</option>
-                                <option value="IN" data-image="/images/flags/IN.svg">India</option>
-                                <option value="IQ" data-image="/images/flags/IQ.svg">Iraq</option>
-                                <option value="IR" data-image="/images/flags/IR.svg">Iran (Islamic Republic of)</option>
-                                <option value="IS" data-image="/images/flags/IS.svg">Iceland</option>
-                                <option value="IT" data-image="/images/flags/IT.svg">Italy</option>
-                                <option value="JE" data-image="/images/flags/JE.svg">Jersey</option>
-                                <option value="JM" data-image="/images/flags/JM.svg">Jamaica</option>
-                                <option value="JO" data-image="/images/flags/JO.svg">Jordan</option>
-                                <option value="JP" data-image="/images/flags/JP.svg">Japan</option>
-                                <option value="KE" data-image="/images/flags/KE.svg">Kenya</option>
-                                <option value="KG" data-image="/images/flags/KG.svg">Kyrgyzstan</option>
-                                <option value="KH" data-image="/images/flags/KH.svg">Cambodia</option>
-                                <option value="KI" data-image="/images/flags/KI.svg">Kiribati</option>
-                                <option value="KM" data-image="/images/flags/KM.svg">Comoros</option>
-                                <option value="KN" data-image="/images/flags/KN.svg">Saint Kitts and Nevis</option>
-                                <option value="KP" data-image="/images/flags/KP.svg">Korea (Democratic People's Republic of)</option>
-                                <option value="KR" data-image="/images/flags/KR.svg">Korea (Republic of)</option>
-                                <option value="KW" data-image="/images/flags/KW.svg">Kuwait</option>
-                                <option value="KY" data-image="/images/flags/KY.svg">Cayman Islands</option>
-                                <option value="KZ" data-image="/images/flags/KZ.svg">Kazakhstan</option>
-                                <option value="LA" data-image="/images/flags/LA.svg">Lao People's Democratic Republic</option>
-                                <option value="LB" data-image="/images/flags/LB.svg">Lebanon</option>
-                                <option value="LC" data-image="/images/flags/LC.svg">Saint Lucia</option>
-                                <option value="LI" data-image="/images/flags/LI.svg">Liechtenstein</option>
-                                <option value="LK" data-image="/images/flags/LK.svg">Sri Lanka</option>
-                                <option value="LR" data-image="/images/flags/LR.svg">Liberia</option>
-                                <option value="LS" data-image="/images/flags/LS.svg">Lesotho</option>
-                                <option value="LT" data-image="/images/flags/LT.svg">Lithuania</option>
-                                <option value="LU" data-image="/images/flags/LU.svg">Luxembourg</option>
-                                <option value="LV" data-image="/images/flags/LV.svg">Latvia</option>
-                                <option value="LY" data-image="/images/flags/LY.svg">Libya</option>
-                                <option value="MA" data-image="/images/flags/MA.svg">Morocco</option>
-                                <option value="MC" data-image="/images/flags/MC.svg">Monaco</option>
-                                <option value="MD" data-image="/images/flags/MD.svg">Moldova (Republic of)</option>
-                                <option value="ME" data-image="/images/flags/ME.svg">Montenegro</option>
-                                <option value="MF" data-image="/images/flags/MF.svg">Saint Martin (French part)</option>
-                                <option value="MG" data-image="/images/flags/MG.svg">Madagascar</option>
-                                <option value="MH" data-image="/images/flags/MH.svg">Marshall Islands</option>
-                                <option value="ML" data-image="/images/flags/ML.svg">Mali</option>
-                                <option value="MM" data-image="/images/flags/MM.svg">Myanmar</option>
-                                <option value="MN" data-image="/images/flags/MN.svg">Mongolia</option>
-                                <option value="MO" data-image="/images/flags/MO.svg">Macao</option>
-                                <option value="MP" data-image="/images/flags/MP.svg">Northern Mariana Islands</option>
-                                <option value="MQ" data-image="/images/flags/MQ.svg">Martinique</option>
-                                <option value="MR" data-image="/images/flags/MR.svg">Mauritania</option>
-                                <option value="MS" data-image="/images/flags/MS.svg">Montserrat</option>
-                                <option value="MT" data-image="/images/flags/MT.svg">Malta</option>
-                                <option value="MU" data-image="/images/flags/MU.svg">Mauritius</option>
-                                <option value="MV" data-image="/images/flags/MV.svg">Maldives</option>
-                                <option value="MW" data-image="/images/flags/MW.svg">Malawi</option>
-                                <option value="MX" data-image="/images/flags/MX.svg">Mexico</option>
-                                <option value="MY" data-image="/images/flags/MY.svg">Malaysia</option>
-                                <option value="MZ" data-image="/images/flags/MZ.svg">Mozambique</option>
-                                <option value="NA" data-image="/images/flags/NA.svg">Namibia</option>
-                                <option value="NC" data-image="/images/flags/NC.svg">New Caledonia</option>
-                                <option value="NE" data-image="/images/flags/NE.svg">Niger</option>
-                                <option value="NF" data-image="/images/flags/NF.svg">Norfolk Island</option>
-                                <option value="NG" data-image="/images/flags/NG.svg">Nigeria</option>
-                                <option value="NI" data-image="/images/flags/NI.svg">Nicaragua</option>
-                                <option value="NL" data-image="/images/flags/NL.svg">Netherlands</option>
-                                <option value="NO" data-image="/images/flags/NO.svg">Norway</option>
-                                <option value="NP" data-image="/images/flags/NP.svg">Nepal</option>
-                                <option value="NR" data-image="/images/flags/NR.svg">Nauru</option>
-                                <option value="NU" data-image="/images/flags/NU.svg">Niue</option>
-                                <option value="NZ" data-image="/images/flags/NZ.svg">New Zealand</option>
-                                <option value="OM" data-image="/images/flags/OM.svg">Oman</option>
-                                <option value="PA" data-image="/images/flags/PA.svg">Panama</option>
-                                <option value="PE" data-image="/images/flags/PE.svg">Peru</option>
-                                <option value="PG" data-image="/images/flags/PG.svg">Papua New Guinea</option>
-                                <option value="PH" data-image="/images/flags/PH.svg">Philippines</option>
-                                <option value="PK" data-image="/images/flags/PK.svg">Pakistan</option>
-                                <option value="PL" data-image="/images/flags/PL.svg">Poland</option>
-                                <option value="PM" data-image="/images/flags/PM.svg">Saint Pierre and Miquelon</option>
-                                <option value="PN" data-image="/images/flags/PN.svg">Pitcairn</option>
-                                <option value="PR" data-image="/images/flags/PR.svg">Puerto Rico</option>
-                                <option value="PS" data-image="/images/flags/PS.svg">Palestine, State of</option>
-                                <option value="PT" data-image="/images/flags/PT.svg">Portugal</option>
-                                <option value="PW" data-image="/images/flags/PW.svg">Palau</option>
-                                <option value="PY" data-image="/images/flags/PY.svg">Paraguay</option>
-                                <option value="QA" data-image="/images/flags/QA.svg">Qatar</option>
-                                <option value="RE" data-image="/images/flags/RE.svg">Réunion</option>
-                                <option value="RO" data-image="/images/flags/RO.svg">Romania</option>
-                                <option value="RS" data-image="/images/flags/RS.svg">Serbia</option>
-                                <option value="RU" data-image="/images/flags/RU.svg">Russian Federation</option>
-                                <option value="RW" data-image="/images/flags/RW.svg">Rwanda</option>
-                                <option value="SA" data-image="/images/flags/SA.svg">Saudi Arabia</option>
-                                <option value="SB" data-image="/images/flags/SB.svg">Solomon Islands</option>
-                                <option value="SC" data-image="/images/flags/SC.svg">Seychelles</option>
-                                <option value="SD" data-image="/images/flags/SD.svg">Sudan</option>
-                                <option value="SE" data-image="/images/flags/SE.svg">Sweden</option>
-                                <option value="SG" data-image="/images/flags/SG.svg">Singapore</option>
-                                <option value="SH" data-image="/images/flags/SH.svg">Saint Helena, Ascension and Tristan da Cunha</option>
-                                <option value="SI" data-image="/images/flags/SI.svg">Slovenia</option>
-                                <option value="SJ" data-image="/images/flags/SJ.svg">Svalbard and Jan Mayen</option>
-                                <option value="SK" data-image="/images/flags/SK.svg">Slovakia</option>
-                                <option value="SL" data-image="/images/flags/SL.svg">Sierra Leone</option>
-                                <option value="SM" data-image="/images/flags/SM.svg">San Marino</option>
-                                <option value="SN" data-image="/images/flags/SN.svg">Senegal</option>
-                                <option value="SO" data-image="/images/flags/SO.svg">Somalia</option>
-                                <option value="SR" data-image="/images/flags/SR.svg">Suriname</option>
-                                <option value="SS" data-image="/images/flags/SS.svg">South Sudan</option>
-                                <option value="ST" data-image="/images/flags/ST.svg">Sao Tome and Principe</option>
-                                <option value="SV" data-image="/images/flags/SV.svg">El Salvador</option>
-                                <option value="SX" data-image="/images/flags/SX.svg">Sint Maarten (Dutch part)</option>
-                                <option value="SY" data-image="/images/flags/SY.svg">Syrian Arab Republic</option>
-                                <option value="SZ" data-image="/images/flags/SZ.svg">Eswatini</option>
-                                <option value="TC" data-image="/images/flags/TC.svg">Turks and Caicos Islands</option>
-                                <option value="TD" data-image="/images/flags/TD.svg">Chad</option>
-                                <option value="TG" data-image="/images/flags/TG.svg">Togo</option>
-                                <option value="TH" data-image="/images/flags/TH.svg">Thailand</option>
-                                <option value="TJ" data-image="/images/flags/TJ.svg">Tajikistan</option>
-                                <option value="TK" data-image="/images/flags/TK.svg">Tokelau</option>
-                                <option value="TL" data-image="/images/flags/TL.svg">Timor-Leste</option>
-                                <option value="TM" data-image="/images/flags/TM.svg">Turkmenistan</option>
-                                <option value="TN" data-image="/images/flags/TN.svg">Tunisia</option>
-                                <option value="TO" data-image="/images/flags/TO.svg">Tonga</option>
-                                <option value="TR" data-image="/images/flags/TR.svg">Turkiye</option>
-                                <option value="TT" data-image="/images/flags/TT.svg">Trinidad and Tobago</option>
-                                <option value="TV" data-image="/images/flags/TV.svg">Tuvalu</option>
-                                <option value="TW" data-image="/images/flags/TW.svg">Taiwan, Province of China</option>
-                                <option value="TZ" data-image="/images/flags/TZ.svg">Tanzania, United Republic of</option>
-                                <option value="UA" data-image="/images/flags/UA.svg">Ukraine</option>
-                                <option value="UG" data-image="/images/flags/UG.svg">Uganda</option>
-                                <option value="UM" data-image="/images/flags/UM.svg">United States Minor Outlying Islands</option>
-                                <option value="US" data-image="/images/flags/US.svg">United States of America</option>
-                                <option value="UY" data-image="/images/flags/UY.svg">Uruguay</option>
-                                <option value="UZ" data-image="/images/flags/UZ.svg">Uzbekistan</option>
-                                <option selected="selected" value="VA" data-image="/images/flags/VA.svg" data-select2-id="240">Holy See</option>
-                                <option value="VC" data-image="/images/flags/VC.svg">Saint Vincent and the Grenadines</option>
-                                <option value="VE" data-image="/images/flags/VE.svg">Venezuela (Bolivarian Republic of)</option>
-                                <option value="VN" data-image="/images/flags/VN.svg">Viet Nam</option>
-                                <option value="VU" data-image="/images/flags/VU.svg">Vanuatu</option>
-                                <option value="WF" data-image="/images/flags/WF.svg">Wallis and Futuna</option>
-                                <option value="WS" data-image="/images/flags/WS.svg">Samoa</option>
-                                <option value="YE" data-image="/images/flags/YE.svg">Yemen</option>
-                                <option value="YT" data-image="/images/flags/YT.svg">Mayotte</option>
-                                <option value="ZA" data-image="/images/flags/ZA.svg">South Africa</option>
-                                <option value="ZM" data-image="/images/flags/ZM.svg">Zambia</option>
-                                <option value="ZW" data-image="/images/flags/ZW.svg">Zimbabwe</option>
-                            </select><span class="select2 select2-container select2-container--bootstrap4 select2-container--disabled" dir="ltr" data-select2-id="239" style="width: 80%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="true" aria-labelledby="select2-ownerCountry-container"><span class="select2-selection__rendered" id="select2-ownerCountry-container" role="textbox" aria-readonly="true" title="Holy See"><span><img src="/images/flags/VA.svg" style="height: 15px; margin-right: 8px;"> Holy See</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-
-
-
-                        </div>
-                    </div>
-
-
-
-                    <!-- /.form-group -->
                 </div>
-                <!-- /.col -->
-                <!-- /.col -->
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Salary</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                </div>
+                                <input type="text" class="form-control"
+                                       id="employeeSalary">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Hire Date</label>
+                            <div class="input-group date" id="employeeHireDate" data-target-input="nearest">
+                                <div class="input-group-prepend" data-target="#employeeHireDate"
+                                     data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <input type="text" class="form-control datetimepicker-input"
+                                       data-target="#employeeHireDate" id="employeeHireDateInput"
+                                       >
+                            </div>
+                        </div>
+                        <script>
+                            $(function () {
+                                $('#employeeHireDate').datetimepicker({
+                                    format: 'DD/MM/YYYY'
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div style="height:15px"></div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-info btn-block" id="addEmployeeButton"><i class="fas fa-save"></i> Save Employee Information</button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- /.row -->
-
-
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer"></div>
     </div>
 
-    
+    <div class="card-footer">
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        $(function () {
+
+            $('.select2').select2();
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        });
 
 
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+
+
+
+            $('#addEmployeeButton').click(function () {
+               
+                var employeeData = {
+                    
+                    EmployeePositionId: $('#employeePosition').val(),
+                    InternalEmployeeCode: $('#employeeCode').val(),
+                    Name: $('#employeeName').val(),
+                    Surname: $('#employeeSurname').val(),
+                    Phone: $('#employeePhone').val(),
+                    Email: $('#employeeEmail').val(),
+                    Salary: parseInt($('#employeeSalary').val()),
+                    //HireDate: $('#employeeHireDateInput').val(),
+                    HireDate: ($('#employeeHireDateInput').val() ? new Date($('#employeeHireDateInput').val()).toISOString().split('T')[0] : null),
+                    PhotoUrl: document.getElementById('employeePhoto').src
+                };
+
+                // AJAX isteği
+                $.ajax({
+                    url: '@Url.Action("AddNewEmployee", "Employee")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(employeeData),
+                    success: function (response) {
+                        window.location.href = response.redirectUrl;
+                    },
+                    error: function (error) {
+                        alert('Error saving employee data!');
+                    }
+                });
+            });
+
+
+            $('#uploadButton').click(function () {
+                $('#fileInput').click();  // Trigger file input when the upload button is clicked
+            });
+
+            // Handle the file input change event
+            $('#fileInput').change(function () {
+                const fileInput = document.getElementById('fileInput');
+                const file = fileInput.files[0];
+
+                if (file) {
+                    // Dosya geçerliliğini kontrol et
+                    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                    if (!validImageTypes.includes(file.type)) {
+                        alert("Lütfen geçerli bir fotoğraf dosyası seçin (JPEG, JPG, PNG).");
+                        return;
+                    }
+
+                    const photoData = new FormData();
+                    photoData.append('file', file);
+                    photoData.append('employeeId', 0);
+
+                    fetch('@Url.Action("UploadPhoto", "Employee")', {
+                        method: 'POST',
+                        body: photoData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.filePath) {
+                                // Sunucudan dönen dosya yolunu önizlemede göster
+                                document.getElementById('employeePhoto').src = data.filePath;
+                            } else {
+                                alert(data.message || "Dosya yüklenirken bir hata oluştu.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                } else {
+                    alert("Lütfen bir dosya seçin.");
+                }
+            });
+
+            // Initialize select2 for Department and Position
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+        });
+    </script>
+}

@@ -67,6 +67,7 @@ namespace Seawise.Controllers
                 .FirstOrDefault(s => s.ShipId == inspectionRecord.ShipId);
 
             ViewBag.Ship = ship;
+            ViewBag.ActiveTabId = "ShipDetails";
             return View(inspectionRecord);
         }
 
