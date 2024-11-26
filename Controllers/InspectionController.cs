@@ -129,5 +129,33 @@ namespace Seawise.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> AddParticipant([FromBody] InspectionParticipant newParticipant)
+        {
+            bool isAny = _context.InspectionParticipants.Any(m => m.EmployeeId == newParticipant.EmployeeId && m.InspectionRecordId == newParticipant.InspectionRecordId);
+            if (isAny)
+            {
+                return null;
+            }
+
+            _context.InspectionParticipants.AddAsync(newParticipant);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveParticipant([FromBody] InspectionParticipant participant)
+        {
+            var p = _context.InspectionParticipants.FirstOrDefault(m => m.EmployeeId == participant.EmployeeId && m.InspectionRecordId == participant.InspectionRecordId);
+            if (p != null)
+            {
+                _context.InspectionParticipants.Remove(p);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return null;
+
+        }
+
     }
 }

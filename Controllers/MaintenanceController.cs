@@ -135,8 +135,7 @@ namespace Seawise.Controllers
             bool isAny = _context.MaintenanceParticipants.Any(m => m.EmployeeId == newParticipant.EmployeeId && m.MaintenanceRecordId == newParticipant.MaintenanceRecordId);
             if (isAny)
             {
-                var MaintenanceParticipant = _context.MaintenanceParticipants.FirstOrDefault(m => m.EmployeeId == newParticipant.EmployeeId && m.MaintenanceRecordId == newParticipant.MaintenanceRecordId);
-                return null;
+               return null;
             }
 
             newParticipant.StartedAt = DateTime.Now;
