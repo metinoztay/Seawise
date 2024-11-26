@@ -112,6 +112,24 @@ namespace Seawise.Controllers
             return Json(new { success = false, message = "Error saving data!" });
         }
 
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddMaintenance([FromBody] MaintenanceRecord newRecord)
+        {
+            if (newRecord.ShipEquipmentId == null || newRecord.Time == null || newRecord == null)
+            {
+                return null;
+            }
+
+            newRecord.Time = newRecord.Time.AddHours(-9);
+            newRecord.Status = false;
+            await _context.MaintenanceRecords.AddAsync(newRecord);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> DeleteMaintenance([FromBody] MaintenanceRecord deleteRecord)
         {
