@@ -128,6 +128,37 @@ namespace Seawise.Controllers
             }
             return BadRequest(new { message = "Error deleting record!" });
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddParticipant([FromBody] MaintenanceParticipant newParticipant)
+        {
+            bool isAny = _context.MaintenanceParticipants.Any(m => m.EmployeeId == newParticipant.EmployeeId && m.MaintenanceRecordId == newParticipant.MaintenanceRecordId);
+            if (isAny)
+            {
+                var MaintenanceParticipant = _context.MaintenanceParticipants.FirstOrDefault(m => m.EmployeeId == newParticipant.EmployeeId && m.MaintenanceRecordId == newParticipant.MaintenanceRecordId);
+                return null;
+            }
+
+            newParticipant.StartedAt = DateTime.Now;
+            _context.MaintenanceParticipants.AddAsync(newParticipant);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveParticipant([FromBody] MaintenanceParticipant participant)
+        {
+           var mp = _context.MaintenanceParticipants.FirstOrDefault(m => m.EmployeeId == participant.EmployeeId && m.MaintenanceRecordId == participant.MaintenanceRecordId);
+            if (mp != null)
+            {
+                _context.MaintenanceParticipants.Remove(mp);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }           
+            
+                return null;
+            
+        }
 
     }
 }

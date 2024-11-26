@@ -37,10 +37,6 @@ public partial class Db8536Context : DbContext
 
     public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
 
-    public virtual DbSet<Permission> Permissions { get; set; }
-
-    public virtual DbSet<PositionPermission> PositionPermissions { get; set; }
-
     public virtual DbSet<Ship> Ships { get; set; }
 
     public virtual DbSet<ShipEquipment> ShipEquipments { get; set; }
@@ -220,29 +216,6 @@ public partial class Db8536Context : DbContext
                 .HasForeignKey(d => d.ShipEquipmentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_MaintenanceRecords_ShipEquipments");
-        });
-
-        modelBuilder.Entity<Permission>(entity =>
-        {
-            entity.Property(e => e.Description)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-            entity.Property(e => e.PermissionName)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<PositionPermission>(entity =>
-        {
-            entity.HasOne(d => d.Permission).WithMany(p => p.PositionPermissions)
-                .HasForeignKey(d => d.PermissionId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PositionPermissions_Permissions");
-
-            entity.HasOne(d => d.Position).WithMany(p => p.PositionPermissions)
-                .HasForeignKey(d => d.PositionId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PositionPermissions_PositionPermissions");
         });
 
         modelBuilder.Entity<Ship>(entity =>

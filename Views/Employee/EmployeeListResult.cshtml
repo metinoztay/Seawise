@@ -1,0 +1,93 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model IEnumerable<Employee>
+@if (Model.Count() > 0)
+{
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Employee List</h3>
+
+
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 13%">
+                            Inernal Number
+                        </th>
+                        <th>
+                            Avatar
+                        </th>
+                        <th style="width: 15%">
+                            Name Surname
+                        </th>
+                        <th style="width: 15%">
+                            Department
+                        </th>
+                        <th>
+                            Position
+                        </th>
+                        
+                        <th style="width: 8%" class="text-center">
+                            Status
+                        </th>
+                        <th style="width: 17%">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model)
+                    {
+                        <tr>
+                            <td>
+                                @employee.InternalEmployeeCode
+                            </td>
+                            <td>
+                                <img alt="Avatar" class="table-avatar" src="@employee.PhotoUrl">
+                            </td>
+                            <td>
+                                <a>
+                                    @employee.Name @employee.Surname
+                                </a>
+
+                            </td>
+                            <td>
+                                @employee.EmployeePosition.EmployeeDepartment.DepartmentName
+                            </td>
+                            <td>
+                                @employee.EmployeePosition.PositionName
+                            </td>
+                            
+                            <td class="project-state">
+                                @if (employee.LeaveDate == null)
+                                {
+                                    <span class="badge badge-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span> Leave at @employee.LeaveDate</span>
+                                }
+
+                            </td>
+                            <td class="project-actions text-right">
+                                <a href="javascript:void(0);"
+                                   onclick="addParticipant(@employee.EmployeeId);"
+                                   class="btn btn-success btn-sm">
+                                    <i class="fas fa-user-plus"></i>
+                                    &ensp;Select
+                                </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+}

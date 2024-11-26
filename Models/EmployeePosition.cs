@@ -14,6 +14,4 @@ public partial class EmployeePosition
     public virtual EmployeeDepartment EmployeeDepartment { get; set; } = null!;
 
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
-
-    public virtual ICollection<PositionPermission> PositionPermissions { get; set; } = new List<PositionPermission>();
 }

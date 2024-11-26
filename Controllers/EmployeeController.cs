@@ -122,6 +122,35 @@ namespace Seawise.Controllers
             }
         }
 
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public IActionResult GetEmployees(int departmentId, int positionId, string searchText)
+        {
+            var employeesQuery = _context.Employees.Include(e => e.EmployeePosition).ThenInclude(e => e.EmployeeDepartment).OrderBy(e => e.HireDate).AsQueryable();
+
+            if (departmentId != 0)
+            {
+                employeesQuery = employeesQuery.Where(e => e.EmployeePosition.EmployeeDepartmentId == departmentId && e.LeaveDate == null);
+            }
+
+            if (positionId != 0)
+            {
+                employeesQuery = employeesQuery.Where(e => e.EmployeePositionId == positionId);
+            }
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                employeesQuery = employeesQuery.Where(e => e.LeaveDate == null && (EF.Functions.Like(e.Name, $"%{searchText}%") || EF.Functions.Like(e.Surname, $"%{searchText}%")));
+            }
+
+            var employees = employeesQuery.ToList();
+
+            return PartialView("EmployeeListResult", employees);
+        }
+
+
+
         private readonly string _uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/employeePhotos");
         [HttpPost]
         public async Task<IActionResult> UploadPhoto(IFormFile file, int employeeId)
