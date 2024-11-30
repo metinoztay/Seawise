@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Seawise.Data;
 using Seawise.Models;
 
 namespace Seawise.Controllers
@@ -14,6 +15,8 @@ namespace Seawise.Controllers
         }
         public IActionResult List(int shipId)
         {
+            InspectionTypes.inspectionTypes = _context.InspectionTypes.ToList();
+
             var ship = _context.Ships
                 .Include(s => s.ShipEquipments)
                 .ThenInclude(e => e.MaintenanceRecords)
@@ -69,6 +72,26 @@ namespace Seawise.Controllers
             ViewBag.Ship = ship;
             ViewBag.ActiveTabId = "ShipDetails";
             return View(inspectionRecord);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddInspection([FromBody] InspectionRecord newRecord)
+        {
+            if (newRecord.ShipId == null || newRecord.InspectionTypeId == null || newRecord == null)
+            {
+                return null;
+            }
+
+
+            newRecord.Time = newRecord.Time.AddHours(-9);
+            await _context.InspectionRecords.AddAsync(newRecord);
+            await _context.SaveChangesAsync();
+
+
+            
+            
+            return Ok();
         }
 
 

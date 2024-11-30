@@ -3,9 +3,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Seawise.Data;
 using Seawise.Models;
+using System.Security.Cryptography;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
+using System.Text;
 
 namespace Seawise.Controllers
 {
@@ -58,6 +60,8 @@ namespace Seawise.Controllers
 
         public IActionResult AddEmployee()
         {
+            DepartmentPositions.departments = _context.EmployeeDepartments.ToList();
+            DepartmentPositions.positions = _context.EmployeePositions.ToList();
             Random random = new Random();
             int code = random.Next(10000000, 99999999);
 
@@ -77,7 +81,7 @@ namespace Seawise.Controllers
             
             newEmployee.InternalEmployeeCode = "SW" + newEmployee.InternalEmployeeCode;
             newEmployee.HireDate = newEmployee.HireDate.AddDays(1);
-            newEmployee.Password = newEmployee.Phone;
+            newEmployee.Password = CreateHash(newEmployee.Phone);
             _context.Employees.Add(newEmployee);
             await _context.SaveChangesAsync();
 
@@ -219,6 +223,22 @@ namespace Seawise.Controllers
             {
                 Console.WriteLine("Dosya silme işlemi başarısız: " + ex.Message);
             }
+        }
+
+        public static string CreateHash(string password) //kullanıcı parolarları şifrelendiğinde kullanılacak
+        {
+
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] tempString = Encoding.UTF8.GetBytes(password);
+            tempString = md5.ComputeHash(tempString);
+            StringBuilder sb = new StringBuilder();
+
+            foreach (byte ba in tempString)
+            {
+                sb.Append(ba.ToString("x2").ToLower());
+            }
+
+            return sb.ToString();
         }
     }
 }

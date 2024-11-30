@@ -15,19 +15,31 @@
     
 
     <div class="card card-info card-outline">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="card-title"><i class="fas fa-check-circle"></i> &ensp; Inspection Records</h3>
-            <div class="form-group mb-0 ml-auto" style="width: auto;">
-                <label for="inspectionTypeFilter" class="sr-only">Filter by Inspection Type:</label>
-                <select id="inspectionTypeFilter" class="form-control form-control-sm" onchange="filterRecords()">
-                    <option value="">All</option>
-                    @foreach (var type in Model.Select(i => i.InspectionType.TypeName).Distinct())
-                    {
-                        <option value="@type">@type</option>
-                    }
-                </select>
+        
+
+
+    <div class="card-header d-flex align-items-center">
+        <h3 class="card-title"><i class="fas fa-check-circle"></i> &ensp; Inspection Records</h3>
+
+        <div class="form-group mb-0 ml-auto" style="width: auto;">
+            <div class="row">
+                <div class="col-5" style="width: 200px;">
+                    <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-add-inspection">
+                        <i class="fas fa-plus"></i>&ensp;Add Inspection
+                    </button>
+                </div>
+                <div class="col-7" style="width: 150px;">
+                    <select id="inspectionTypeFilter" class="form-control form-control-sm" onchange="filterRecords()">
+                        <option value="">All</option>
+                        @foreach (var type in Model.Select(i => i.InspectionType.TypeName).Distinct())
+                        {
+                            <option value="@type">@type</option>
+                        }
+                    </select>
+                </div>
             </div>
         </div>
+    </div>
 
 
 
@@ -90,19 +102,113 @@
     </div>
 
 
-<script>
-    function filterRecords() {
-        var filterValue = document.getElementById("inspectionTypeFilter").value.toLowerCase();
-        var table = document.getElementById("inspectionRecordsTable");
-        var trs = table.getElementsByTagName("tr");
+<div id="toastsContainerTopRight" class="toasts-top-right fixed"></div>
+<!-- Modal -->
+<div class="modal fade" id="modal-add-inspection" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-s">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Inspection</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
 
-        for (var i = 1; i < trs.length; i++) { // Start from 1 to skip the header
-            var inspectionType = trs[i].getElementsByClassName("inspection-type")[0].textContent.toLowerCase();
-            if (inspectionType.includes(filterValue) || filterValue === "") {
-                trs[i].style.display = ""; // Show the row
-            } else {
-                trs[i].style.display = "none"; // Hide the row
+
+
+                <div class="form-group">
+
+
+                    <div class="form-group">
+                        <label>Inspection Date & Time:</label>
+                        <div class="input-group date" id="inspectionTime" data-target-input="nearest">
+
+                            <div class="input-group-prepend" data-target="#inspectionTime" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                            <input type="text" class="form-control datetimepicker-input" data-target="#inspectionTime" id="inspectionTimeInput" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+                    </div>
+                    <select class="form-control select2bs4 select2-hidden-accessible" style="width: 80%;" id="inspectionType">
+                        
+                        @foreach (var type in Seawise.Data.InspectionTypes.inspectionTypes)
+                        {
+                            <option value="@type.InspectionTypeId">@type.TypeName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" id="closeButton" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="saveInspectionButton" class="btn btn-outline-success">SAVE</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@section Scripts {
+    <script>
+            $(function () {
+
+                $('.select2').select2();
+
+                $('.select2bs4').select2({
+                    theme: 'bootstrap4'
+                });
+
+                $('#inspectionTime').datetimepicker({ icons: { time: 'far fa-clock' } });
+            });
+    </script>
+
+            <script>
+            function filterRecords() {
+                var filterValue = document.getElementById("inspectionTypeFilter").value.toLowerCase();
+                var table = document.getElementById("inspectionRecordsTable");
+                var trs = table.getElementsByTagName("tr");
+
+                for (var i = 1; i < trs.length; i++) { // Start from 1 to skip the header
+                    var inspectionType = trs[i].getElementsByClassName("inspection-type")[0].textContent.toLowerCase();
+                    if (inspectionType.includes(filterValue) || filterValue === "") {
+                        trs[i].style.display = ""; // Show the row
+                    } else {
+                        trs[i].style.display = "none"; // Hide the row
+                    }
+                }
             }
+        </script>
+
+    <script>
+            $('#saveInspectionButton').click(function () {
+
+                var inspectionData = {
+                    ShipId: parseInt('@ship.ShipId'),
+                InspectionTypeId: $('#inspectionType').val(),
+                    Time: new Date($('#inspectionTimeInput').val()).toISOString().slice(0, 19) + 'Z'
+                };
+
+
+
+                $.ajax({
+                    url: '@Url.Action("AddInspection", "Inspection")',
+                    type: 'POST',
+                    contentType: 'application/json',
+            data: JSON.stringify(inspectionData),
+                success: function () { location.reload(); },
+                    error: function (error) {
+                        alert('Error saving data!');
+                    }
+                });
+            });
+    </script>
+
+
         }
-    }
-</script>
