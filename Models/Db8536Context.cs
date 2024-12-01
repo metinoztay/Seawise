@@ -173,7 +173,6 @@ public partial class Db8536Context : DbContext
 
             entity.HasOne(d => d.Ship).WithMany(p => p.InspectionRecords)
                 .HasForeignKey(d => d.ShipId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_InspectionRecords_Ships");
         });
 
@@ -211,7 +210,6 @@ public partial class Db8536Context : DbContext
 
             entity.HasOne(d => d.ShipEquipment).WithMany(p => p.MaintenanceRecords)
                 .HasForeignKey(d => d.ShipEquipmentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_MaintenanceRecords_ShipEquipments");
         });
 
@@ -272,7 +270,6 @@ public partial class Db8536Context : DbContext
 
             entity.HasOne(d => d.Ship).WithMany(p => p.ShipEquipments)
                 .HasForeignKey(d => d.ShipId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ShipEquipments_Ships");
         });
 
