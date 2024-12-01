@@ -142,7 +142,6 @@ public partial class Db8536Context : DbContext
 
             entity.HasOne(d => d.InspectionRecord).WithMany(p => p.InspectionFindings)
                 .HasForeignKey(d => d.InspectionRecordId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_InspectionFindings_InspectionRecords");
 
             entity.HasOne(d => d.InspectionType).WithMany(p => p.InspectionFindings)
@@ -160,7 +159,6 @@ public partial class Db8536Context : DbContext
 
             entity.HasOne(d => d.InspectionRecord).WithMany(p => p.InspectionParticipants)
                 .HasForeignKey(d => d.InspectionRecordId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_InspectionParticipants_InspectionRecords");
         });
 
@@ -201,7 +199,6 @@ public partial class Db8536Context : DbContext
 
             entity.HasOne(d => d.MaintenanceRecord).WithMany(p => p.MaintenanceParticipants)
                 .HasForeignKey(d => d.MaintenanceRecordId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_MaintenanceParticipants_MaintenanceRecords");
         });
 

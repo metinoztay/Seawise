@@ -74,6 +74,24 @@ namespace Seawise.Controllers
             return View(inspectionRecord);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteInspection ([FromBody] InspectionRecord deleteRecord)
+        {
+            var record = await _context.InspectionRecords.FindAsync(deleteRecord.InspectionRecordId);
+
+            int tempshipId = deleteRecord.ShipId;
+
+            if (record != null)
+            {
+
+                _context.InspectionRecords.Remove(record);
+                await _context.SaveChangesAsync();
+
+                return Json(new { redirectUrl = Url.Action("List", "Inspection", new { shipId = tempshipId }) });
+            }
+            return BadRequest(new { message = "Error deleting record!" });
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> AddInspection([FromBody] InspectionRecord newRecord)

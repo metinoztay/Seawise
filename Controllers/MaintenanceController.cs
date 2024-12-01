@@ -139,6 +139,7 @@ namespace Seawise.Controllers
 
             if (record != null)
             {
+                
                 _context.MaintenanceRecords.Remove(record);
                 await _context.SaveChangesAsync();
 
