@@ -111,18 +111,29 @@ namespace Seawise.Controllers
             employee.Email = employeeData.Email;
             employee.Salary = employeeData.Salary;
             //employee.HireDate = DateOnly.Parse(employeeData.HireDate.ToShortDateString());
-            employee.LeaveDate = employeeData.LeaveDate;
-            employee.PhotoUrl = employeeData.PhotoUrl;
+
+            if (employeeData.LeaveDate != null)
+            {
+                DateTime leave = DateTime.Parse(employeeData.LeaveDate.ToString());
+                leave = leave.AddDays(1);
+                employee.LeaveDate = DateOnly.Parse(leave.ToShortDateString());
+                employee.PhotoUrl = employeeData.PhotoUrl;
+            }
+            else
+            {
+                employee.LeaveDate = null;
+            }
+            
 
             // Veritabanına kaydet
             try
             {
                 _context.SaveChanges();
-                return Ok(new { message = "Employee data updated successfully." });
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while saving the data.", details = ex.Message });
+                return StatusCode(500);
             }
         }
 

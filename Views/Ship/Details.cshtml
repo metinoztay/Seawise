@@ -82,7 +82,7 @@
                         <div class="input-group-prepend" data-target="#launchDate" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
-                        <input type="text" class="form-control datetimepicker-input" value="@Model.LaunchDate" data-target="#launchDate" id="launchDateInput" disabled>
+                        <input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="@Model.LaunchDate.ToString("dd/MM/yyyy")" data-target="#launchDate" id="launchDateInput" disabled>
                     </div>
                 </div>
 
@@ -362,6 +362,9 @@
         $('.select2bs4').select2({
             theme: 'bootstrap4'
         });
+
+            //Datemask dd/mm/yyyy
+        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
     });
 
 
