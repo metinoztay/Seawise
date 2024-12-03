@@ -185,7 +185,33 @@
                             });
                         </script>
                     </div>
+
+                    <div class="col-md-6" id="leaveDateTemp" style="display: none;">
+                        <div class="form-group">
+                            <label>Leave Date</label>
+                            <div class="input-group date" id="employeeLeaveDateTemp" data-target-input="nearest">
+                                <div class="input-group-prepend" data-target="#employeeLeaveDateTemp"
+                                     data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <input type="text" class="form-control"
+                                       data-target="#employeeLeaveDateTemp" id="employeeLeaveDateTempInput"
+                                       value="@Model.LeaveDate?.ToString("dd/MM/yyyy")" disabled>
+                            </div>
+                        </div>
+                        <script>
+                            $(function () {
+                                $('#employeeLeaveDateTemp').datetimepicker({
+                                    format: 'DD/MM/YYYY'
+                                });
+                            });
+                        </script>
+                    </div>
                 </div>
+
+
+                
+
 
                 <div class="row" id="leaveDateRow" style="display: none;">
                     <div class="col-md-6">
@@ -378,7 +404,7 @@
     <script>
         $(document).ready(function () {
             if ('@Model.LeaveDate' != '') {
-                $('#leaveDateRow').show(); // 'Leave Date' alanını göster
+                $('#leaveDateTemp').show();
             }
 
             $('#editButton').click(function () {
@@ -388,6 +414,9 @@
                 $('#employeePhone').prop('readonly', false);
                 $('#employeeEmail').prop('readonly', false);
                 $('#employeeSalary').prop('readonly', false);
+
+                $('#leaveDateTemp').hide();
+                $('#leaveDateRow').show();
                 $('#leaveDateInput').removeAttr("disabled");
                 $('#leaveDate').prop('readonly', false); // Leave Date alanını da düzenlenebilir yap
                 $('#uploadButton').show();
