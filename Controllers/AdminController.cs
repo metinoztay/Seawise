@@ -14,14 +14,6 @@ namespace Seawise.Controllers
         public AdminController()
         {
             _context = new Db8536Context();
-        }
-        public IActionResult Dashboard()
-        {
-            ViewBag.ActiveTabId = "Dashboard";
-            return View();
-        }
-
-
-        
+        }        
     }
 }

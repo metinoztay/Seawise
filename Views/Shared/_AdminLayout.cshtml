@@ -53,13 +53,7 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="file:///C:/Users/Metin/Desktop/AdminLTE/layout.html#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="file:///C:/Users/Metin/Desktop/AdminLTE/index3.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="file:///C:/Users/Metin/Desktop/AdminLTE/layout.html#" class="nav-link">Contact</a>
+                    <a class="nav-link" data-widget="pushmenu" role="button"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
 
@@ -67,13 +61,13 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="fullscreen" href="file:///C:/Users/Metin/Desktop/AdminLTE/layout.html#" role="button">
+                    <a class="nav-link" data-widget="fullscreen"  role="button">
                         <i class="fas fa-expand-arrows-alt"></i>
                     </a>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="file:///C:/Users/Metin/Desktop/AdminLTE/layout.html#" aria-expanded="false">
+                    <a class="nav-link" data-toggle="dropdown" aria-expanded="false">
 
                         <div class="image">
                             <img src="@ActiveUser.activeUser.PhotoUrl" style="height: 25px;
@@ -89,7 +83,7 @@
     " class="img-circle elevation-2" alt="User Image"></i> @ActiveUser.activeUser.Name @ActiveUser.activeUser.Surname
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="file:///C:/Users/Metin/Desktop/AdminLTE/layout.html#" class="dropdown-item">
+                        <a href="" class="dropdown-item">
                             <i class="fas fa-user mr-2"></i>Profile
                         </a>
 
@@ -110,7 +104,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar elevation-4 sidebar-dark-lightblue">
             <!-- Brand Logo -->
-            <a href="@Url.Action("Dashboard", "Admin")" class="brand-link">
+            <a href="@Url.Action("List", "Ship")" class="brand-link">
                 <img src="~/images/Logo.png" alt="SeaWise Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text"><strong>Sea</strong><em>Wise</em></span>
 
@@ -126,14 +120,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
-                        <li class="nav-item">
-                            <a href="@Url.Action("Dashboard", "Admin")" class="nav-link" id="Dashboard">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard                                   
-                                </p>
-                            </a>
-                        </li>
+                        
                         <li class="nav-header">SHIPS</li>
                         <li class="nav-item">
                             <a href="@Url.Action("List", "Ship")" class="nav-link" id="ShipList">
@@ -320,6 +307,14 @@
         var year = new Date().getFullYear();
         if (year != 2024)
             document.getElementById("currentYear").textContent = " - " + year;
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('[data-widget="pushmenu"]').addEventListener('click', function() {
+                document.body.classList.toggle('sidebar-open');
+            });
+        });
     </script>
 
     <script>

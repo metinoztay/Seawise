@@ -47,20 +47,8 @@ namespace Seawise.Controllers
 
                 ActiveUser.activeUser = userInformations;
 
-                return RedirectToAction("Dashboard", "Admin", userInformations);
-                /*
-                if (userInformations.Authority == "Teacher")
-                {
-                    return RedirectToAction("Index", "Teacher", userInformations);
-                }
-                else if (userInformations.Authority == "Student")
-                {
-                    return RedirectToAction("Index", "Student", userInformations);
-                }
-                else if (userInformations.Authority == "Admin")
-                {
-                    return RedirectToAction("Index", "Admin", userInformations);
-                }*/
+                return RedirectToAction("List", "Ship", userInformations);
+               
             }
             return View();
         }
