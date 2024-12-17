@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Seawise.Data;
 using Seawise.Models;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Seawise.Controllers
 {
+    [Authorize]
     public class EquipmentController : Controller
     {
         private readonly Db8536Context _context;

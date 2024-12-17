@@ -7,9 +7,11 @@ using SixLabors.ImageSharp.Formats.Jpeg;
 using Microsoft.AspNetCore.Components.Forms;
 using Seawise.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Seawise.Controllers
 {
+    [Authorize]
     public class OwnerController : Controller
     {
         private readonly Db8536Context _context;

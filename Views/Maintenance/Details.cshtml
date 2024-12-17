@@ -1,5 +1,5 @@
 ﻿@model MaintenanceRecord
-
+@using Seawise.Data
 @{
     ViewData["Title"] = "Maintenance Record Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -17,14 +17,17 @@
         <span class="badge @(Model.Status ? "badge-success" : "badge-warning")">
             @(Model.Status ? "Completed" : "Planned")
         </span>
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" id="editButton">
-                <i class="fas fa-edit"></i>&nbsp; Edit
-            </button>
-            <button type="button" class="btn btn-tool" id="saveButton" hidden>
-                <i class="fas fa-save"></i>&nbsp; Save
-            </button>
-        </div>
+        @if (Authorities.isParticipant(ActiveUser.activeUser.EmployeeId,Model.MaintenanceRecordId,"MAİNTENANCE") || Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "MAİNTENANCEADD"))
+        {
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" id="editButton">
+                    <i class="fas fa-edit"></i>&nbsp; Edit
+                </button>
+                <button type="button" class="btn btn-tool" id="saveButton" hidden>
+                    <i class="fas fa-save"></i>&nbsp; Save
+                </button>
+            </div>
+        }
     </div>
 
     <div class="card-body">
@@ -44,7 +47,7 @@
                     <label>Description:</label>
                     <textarea class="form-control" rows="4" readonly>@Model.ShipEquipment.Description</textarea>
                 </div>
-                
+
             </div>
 
             <!-- Maintenance Details -->
@@ -74,9 +77,12 @@
                     </select>
 
                 </div>
-                <button type="button" class="btn btn-outline-danger btn-block mt-3" id="deleteButton" data-toggle="modal" data-target="#deleteModal" hidden>
-                    <i class="fas fa-trash"></i>&nbsp; Delete Maintenance Record
-                </button>
+                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "MAİNTENANCEADD"))
+                {
+                    <button type="button" class="btn btn-outline-danger btn-block mt-3" id="deleteButton" data-toggle="modal" data-target="#deleteModal" hidden>
+                        <i class="fas fa-trash"></i>&nbsp; Delete Maintenance Record
+                    </button>
+                }
             </div>
 
             <!-- Equipment Photo -->
@@ -111,24 +117,26 @@
 
 <!-- Maintenance Participants Section -->
 
-    <div class="card card-warning card-outline mt-4">
-       
+<div class="card card-warning card-outline mt-4">
+
     <div class="card-header d-flex align-items-center">
         <h3 class="card-title"><i class="fas fa-users"></i>&nbsp; Maintenance Participants</h3>
 
         <div class="form-group mb-0 ml-auto" style="width: auto;">
             <div class="row">
-                <div style="width: 200px;">
-                    <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-default">
-                        <i class="fas fa-plus"></i>&ensp;Add Participant
-                    </button>
-                </div>
-               
+                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "MAİNTENANCEADD"))
+                {
+                    <div style="width: 200px;">
+                        <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-default">
+                            <i class="fas fa-plus"></i>&ensp;Add Participant
+                        </button>
+                    </div>
+                }
             </div>
         </div>
 
     </div>
-        <div class="card-body p-0">
+    <div class="card-body p-0">
         @if (Model?.MaintenanceParticipants?.Any() ?? false)
         {
             <table class="table table-hover table-striped">
@@ -160,15 +168,21 @@
                             <td>@employee?.EmployeePosition?.EmployeeDepartment?.DepartmentName</td>
                             <td>@employee?.EmployeePosition?.PositionName</td>
                             <td>
-                                <a href="@Url.Action("Details", "Employee", new { employeeId = employee?.EmployeeId })" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-user"></i>&ensp;View Profile
-                                </a>
-                                <button class="btn btn-danger btn-sm delete-finding-button"
+                                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "EMPLOYEE"))
+                                {
+                                    <a href="@Url.Action("Details", "Employee", new { employeeId = employee?.EmployeeId })" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-user"></i>&ensp;View Profile
+                                    </a>
+                                }
+                                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "MAİNTENANCEADD"))
+                                {
+                                    <button class="btn btn-danger btn-sm delete-participant-button"
                                         data-employee-id="@employee.EmployeeId"
                                         data-toggle="modal"
                                         data-target="#deleteParticipantModal">
                                     <i class="fas fa-trash"></i>
                                 </button>
+                                }
                             </td>
                         </tr>
                     }
@@ -331,7 +345,7 @@
                let employeeIdToDelete = null;
 
             // Delete button'a tıklanınca modal'ı aç ve ilgili Finding ID'sini al
-            $('.delete-finding-button').on('click', function () {
+            $('.delete-participant-button').on('click', function () {
                 employeeIdToDelete = $(this).data('employee-id');
             });
 

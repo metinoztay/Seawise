@@ -12,7 +12,8 @@
     <div class="card-header">
 
         <h3 class="card-title"><i class="fas fa-ship"></i> &nbsp; Ship Profile</h3>
-
+        @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "SHİPUPDATE"))
+                    {
         <div class="card-tools">
             <button type="button" class="btn btn-tool" id="saveButton" hidden="hidden">
                 <i class="fas fa-save"></i>
@@ -21,7 +22,7 @@
                 <i class="fas fa-edit"></i>
             </button>
         </div>
-
+                    }
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -136,12 +137,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                 </div>
+                                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "SHİPADD"))
+                                     {
                                 <div class="col-md-6">
                                     <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#modal-default">
                                         <i class="fas fa-trash"></i> Delete Ship
                                     </button>
                                 </div>
-                                
+                                     }
                             </div>
                         </div>
                     </div>

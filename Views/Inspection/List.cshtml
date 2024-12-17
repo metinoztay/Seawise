@@ -1,4 +1,4 @@
-﻿
+﻿@using Seawise.Data
 @{
     ViewData["Title"] = "Inspection Records";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -24,9 +24,12 @@
         <div class="form-group mb-0 ml-auto" style="width: auto;">
             <div class="row">
                 <div class="col-5" style="width: 200px;">
+                    @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "İNSPECTİONADD"))
+                                {
                     <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-add-inspection">
                         <i class="fas fa-plus"></i>&ensp;Add Inspection
                     </button>
+                                }
                 </div>
                 <div class="col-7" style="width: 150px;">
                     <select id="inspectionTypeFilter" class="form-control form-control-sm" onchange="filterRecords()">

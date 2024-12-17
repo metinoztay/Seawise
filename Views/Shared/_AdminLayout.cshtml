@@ -35,16 +35,16 @@
     <link rel="stylesheet" href="~/themedata/adminlte/plugins/bs-stepper/css/bs-stepper.min.css"/>
     <!-- dropzonejs -->
     <link rel="stylesheet" href="~/themedata/adminlte/plugins/dropzone/min/dropzone.min.css"/>
-    
+
 </head>
 <!--
 `body` tag options:
 
-  Apply one or more of the following classes to to the body tag
-  to get the desired effect
+Apply one or more of the following classes to to the body tag
+to get the desired effect
 
-  * sidebar-collapse
-  * sidebar-mini
+* sidebar-collapse
+* sidebar-mini
 -->
 <body class="sidebar-mini layout-navbar-fixed layout-fixed" style="height: auto;">
     <div class="wrapper">
@@ -71,7 +71,7 @@
 
                         <div class="image">
                             <img src="@ActiveUser.activeUser.PhotoUrl" style="height: 25px;
-    " class="img-circle elevation-2" alt="User Image">
+                            " class="img-circle elevation-2" alt="User Image">
                         </div>
 
                     </a>
@@ -80,13 +80,15 @@
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item text-center">
                             <img src="@ActiveUser.activeUser.PhotoUrl" style="height: 30px;
-    " class="img-circle elevation-2" alt="User Image"></i> @ActiveUser.activeUser.Name @ActiveUser.activeUser.Surname
+                            " class="img-circle elevation-2" alt="User Image"></i> @ActiveUser.activeUser.Name @ActiveUser.activeUser.Surname
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="" class="dropdown-item">
-                            <i class="fas fa-user mr-2"></i>Profile
-                        </a>
+                        
 
+                        <a asp-controller="Employee" asp-action="Details" asp-route-employeeId="@ActiveUser.activeUser.EmployeeId" class="dropdown-item">
+                            <i class="fas fa-user mr-2"></i>Profile
+                            
+                        </a>
 
 
                         <div class="dropdown-divider"></div>
@@ -113,106 +115,143 @@
             <!-- Sidebar -->
             <div class="sidebar os-theme-dark" style="overflow-y: auto;">
                 <!-- Sidebar user panel (optional) -->
-                
+
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                             with font-awesome or any other icon font library -->
-                        
-                        <li class="nav-header">SHIPS</li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("List", "Ship")" class="nav-link" id="ShipList">
-                                <i class="nav-icon fas fa-ship"></i>
-                                <p>
-                                    Ship List
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("List", "Ship")" class="nav-link" id="ShipDetails">
-                                <i class="nav-icon fas fa-columns"></i>
-                                <p>
-                                    Ship Details
-                                </p>
-                            </a>
-                        </li>
-                        <li class ="nav-item">
-                            <a href="@Url.Action("List", "Owner")" class="nav-link" id="AddShip">
-                                <i class="nav-icon fas fa-anchor"></i>
-                                <p>
-                                    Add Ship
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("List", "Ship")" class="nav-link" id="DeleteShip">
-                                <i class="nav-icon fas fa-trash"></i>
-                                <p>
-                                    Delete Ship
-                                </p>
-                            </a>
-                        </li>
-                        
-                        <li class="nav-header">SHIP OWNERS</li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("List", "Owner")" class="nav-link" id="OwnerList">
-                                <i class="nav-icon fas fa-address-card"></i>
-                                <p>
-                                    Owners List
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("List", "Owner")" class="nav-link" id="OwnerProfile">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>
-                                    Owner Profile
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("AddOwner", "Owner")" class="nav-link" id="AddOwner">
-                                <i class="nav-icon fas fa-user-plus"></i>
-                                <p>
-                                    Owner Add
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-header">EMPLOYEES</li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("List", "Employee")" class="nav-link" id="EmployeeList">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Employee List
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("List", "Employee")" class="nav-link" id="EmployeeDetails">
-                                <i class="nav-icon fas fa-user-cog"></i>
-                                <p>
-                                    Employee Details
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("AddEmployee", "Employee")" class="nav-link" id="AddEmployee">
-                                <i class="nav-icon fas fa-user-plus"></i>
-                                <p>
-                                    Add Employee
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("List", "Employee")" class="nav-link" id="DeleteEmployee">
-                                <i class="nav-icon fas fa-user-minus"></i>
-                                <p>
-                                    Delete Employee
-                                </p>
-                            </a>
-                        </li>
+                        with font-awesome or any other icon font library -->
+                        @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "SHİP"))
+                        {
+                            <li class="nav-header">SHIPS</li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("List", "Ship")" class="nav-link" id="ShipList">
+                                    <i class="nav-icon fas fa-ship"></i>
+                                    <p>
+                                        Ship List
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("List", "Ship")" class="nav-link" id="ShipDetails">
+                                    <i class="nav-icon fas fa-columns"></i>
+                                    <p>
+                                        Ship Details
+                                    </p>
+                                </a>
+                            </li>
+                            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "SHİPADD"))
+                            {
+                                <li class ="nav-item">
+                                    <a href="@Url.Action("List", "Owner")" class="nav-link" id="AddShip">
+                                        <i class="nav-icon fas fa-anchor"></i>
+                                        <p>
+                                            Add Ship
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+                            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "SHİPADD"))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("List", "Ship")" class="nav-link" id="DeleteShip">
+                                        <i class="nav-icon fas fa-trash"></i>
+                                        <p>
+                                            Delete Ship
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+                        }
+                        @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "OWNER"))
+                        {
+                            <li class="nav-header">SHIP OWNERS</li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("List", "Owner")" class="nav-link" id="OwnerList">
+                                    <i class="nav-icon fas fa-address-card"></i>
+                                    <p>
+                                        Owners List
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="@Url.Action("List", "Owner")" class="nav-link" id="OwnerProfile">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>
+                                        Owner Profile
+                                    </p>
+                                </a>
+                            </li>
+
+                            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "OWNERUPDATE"))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("AddOwner", "Owner")" class="nav-link" id="AddOwner">
+                                        <i class="nav-icon fas fa-user-plus"></i>
+                                        <p>
+                                            Owner Add
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+                        }
+                        @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "EMPLOYEE"))
+                        {
+                            <li class="nav-header">EMPLOYEES</li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("List", "Employee")" class="nav-link" id="EmployeeList">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        Employee List
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("List", "Employee")" class="nav-link" id="EmployeeDetails">
+                                    <i class="nav-icon fas fa-user-cog"></i>
+                                    <p>
+                                        Employee Details
+                                    </p>
+                                </a>
+                            </li>
+                            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "EMPLOYEEADD"))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("AddEmployee", "Employee")" class="nav-link" id="AddEmployee">
+                                        <i class="nav-icon fas fa-user-plus"></i>
+                                        <p>
+                                            Add Employee
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+                            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "EMPLOYEEADD"))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("List", "Employee")" class="nav-link" id="DeleteEmployee">
+                                        <i class="nav-icon fas fa-user-minus"></i>
+                                        <p>
+                                            Delete Employee
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+                        }
+
+                        @if (ActiveUser.activeUser.EmployeePosition.EmployeePositionId == 5 || ActiveUser.activeUser.EmployeePosition.EmployeePositionId == 8)
+                        {
+                            <li class="nav-header">TASKS</li>
+                            <li class="nav-item">
+                                <a asp-controller="Employee" asp-action="Details" asp-route-employeeId="@ActiveUser.activeUser.EmployeeId" class="nav-link" id="EmployeeDetails">
+                                    <i class="fas fa-business-time"></i>
+                                        <p>
+                                             My Assignments
+                                        </p>
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -231,7 +270,7 @@
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="file:///C:/Users/Metin/Desktop/AdminLTE/layout.html#">Admin</a></li>
+                                <li class="breadcrumb-item active">SeaWise</li>
                                 <li class="breadcrumb-item active">@ViewBag.Title</li>
                             </ol>
                         </div><!-- /.col -->
@@ -309,13 +348,7 @@
             document.getElementById("currentYear").textContent = " - " + year;
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('[data-widget="pushmenu"]').addEventListener('click', function() {
-                document.body.classList.toggle('sidebar-open');
-            });
-        });
-    </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

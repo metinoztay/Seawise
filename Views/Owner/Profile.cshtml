@@ -12,12 +12,15 @@
         <h3 class="card-title"><i class="fas fa-id-card-alt"></i> &nbsp; Ship Owner's Profile</h3>
 
         <div class="card-tools">
+            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "OWNERUPDATE"))
+                            {
             <button type="button" class="btn btn-tool" id="saveButton" hidden="hidden">
                 <i class="fas fa-save"></i>
             </button>
             <button type="button" class="btn btn-tool" id="editButton">
                 <i class="fas fa-edit"></i>
             </button>
+                            }
             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
             </button>
@@ -181,12 +184,14 @@
                     href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home"
                     aria-selected="true"><i class="fas fa-ship"></i> &nbsp; Ship List</a>
             </li>
+            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "SHİPADD"))
+                            {
             <li class="nav-item">
                 <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill"
                     href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile"
                     aria-selected="false"><i class="fas fa-anchor"></i> &nbsp; Add Ship</a>
             </li>
-
+                            }
 
         </ul>
 

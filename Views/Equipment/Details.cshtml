@@ -14,15 +14,19 @@
 
         <h3 class="card-title"><i class="fas fa-satellite-dish"></i></i> &nbsp; Equipment Details</h3>
 
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" id="saveButton" hidden="hidden">
-                <i class="fas fa-save"></i>
-            </button>
-            <button type="button" class="btn btn-tool" id="editButton">
-                <i class="fas fa-edit"></i>
-            </button>
-        </div>
+        @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "EQUİPMENTADD"))
+        {
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" id="saveButton" hidden="hidden">
+                    <i class="fas fa-save"></i>
+                </button>
 
+                <button type="button" class="btn btn-tool" id="editButton">
+                    <i class="fas fa-edit"></i>
+                </button>
+
+            </div>
+        }
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -61,10 +65,10 @@
                         <textarea class="form-control" rows="4" readonly="" id="equipmentDesc" style="height: 125px;">@Model.Description</textarea>
                     </div>
                 </div>
-                
+
 
             </div>
-            
+
 
             <div class="col-md-5">
                 <div class="form-group">
@@ -102,7 +106,7 @@
                 </div>
 
 
-               
+
                 <div class="form-group">
                     <label>Status</label>
                     <div class="input-group">
@@ -128,21 +132,23 @@
                 <!-- /.form-group -->
 
                 <div class="form-group" id="actionButtons" hidden>
-                    
-                    <div class="input-group">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6">
-                                </div>
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#modal-default">
-                                        <i class="fas fa-trash"></i> Delete Equipment
-                                    </button>
-                                </div>
+                    @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "EQUİPMENTADD"))
+                    {
+                        <div class="input-group">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#modal-default">
+                                            <i class="fas fa-trash"></i> Delete Equipment
+                                        </button>
+                                    </div>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
 
 
@@ -213,9 +219,12 @@
                 <div class="form-group mb-0 ml-auto" style="width: auto;">
                     <div class="row">
                         <div style="width: 200px;">
+                            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "MAİNTENANCEADD"))
+                                {
                     <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-add-maintenance">
                                 <i class="fas fa-plus"></i>&ensp;Add Maintenance
                             </button>
+                                }
                         </div>
 
                     </div>

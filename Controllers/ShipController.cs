@@ -6,9 +6,11 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using System.Reflection.Metadata;
 using Seawise.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Seawise.Controllers
 {
+    [Authorize]
     public class ShipController : Controller
     {
         private readonly Db8536Context _context;

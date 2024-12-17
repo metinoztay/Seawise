@@ -31,7 +31,7 @@ namespace Seawise.Controllers
             }
             swCode = "SW" + swCode.Replace("-","");
             string hashPassword = CreateHash(password);
-            var userInformations = _context.Employees.FirstOrDefault(x => x.InternalEmployeeCode == swCode && x.Password == hashPassword);
+            var userInformations = _context.Employees.Include(e => e.EmployeePosition).ThenInclude(e => e.EmployeeDepartment).FirstOrDefault(x => x.InternalEmployeeCode == swCode && x.Password == hashPassword);
 
 
             if (userInformations != null) //kullanıcı bulundu
@@ -44,7 +44,7 @@ namespace Seawise.Controllers
                 ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
                 await HttpContext.SignInAsync(principal);
 
-
+                
                 ActiveUser.activeUser = userInformations;
 
                 return RedirectToAction("List", "Ship", userInformations);

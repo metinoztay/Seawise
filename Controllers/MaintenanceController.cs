@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Seawise.Models;
 
 namespace Seawise.Controllers
 {
+    [Authorize]
     public class MaintenanceController : Controller
     {
         private readonly Db8536Context _context;

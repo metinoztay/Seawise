@@ -8,9 +8,11 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Seawise.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly Db8536Context _context;

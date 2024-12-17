@@ -31,7 +31,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Ship}/{action=Details}/{shipId=20}");
+    pattern: "{controller=Account}/{action=Login}");
 //https://localhost:7034/Ship?shipId=20
 
 app.UseDeveloperExceptionPage();

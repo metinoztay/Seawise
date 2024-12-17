@@ -12,12 +12,15 @@
         <h3 class="card-title"><i class="fas fa-id-card-alt"></i> &nbsp; Employee Profile</h3>
 
         <div class="card-tools">
+            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "EMPLOYEEUPDATE"))
+                            {
             <button type="button" class="btn btn-tool" id="saveButton" hidden>
                 <i class="fas fa-save"></i>
             </button>
             <button type="button" class="btn btn-tool" id="editButton">
                 <i class="fas fa-edit"></i>
             </button>
+                            }
             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
             </button>
@@ -38,7 +41,7 @@
 
                 <!-- Buton -->
                 <button type="button" class="btn btn-outline-success btn-block" id="uploadButton"
-                    style="display: none;">
+                style="display: none;">
                     <i class="fas fa-upload"></i> Upload New Photo
                 </button>
             </div>
@@ -53,7 +56,7 @@
                                     <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
                                 </div>
                                 <input type="text" class="form-control" value="@Model.InternalEmployeeCode"
-                                    id="employeeCode" readonly="readonly">
+                                id="employeeCode" readonly="readonly">
                             </div>
                         </div>
                     </div>
@@ -66,7 +69,7 @@
                                     <span class="input-group-text"><i class="far fa-id-card"></i></span>
                                 </div>
                                 <input type="text" class="form-control" value="@Model.Name @Model.Surname"
-                                    id="employeeName" readonly="readonly">
+                                id="employeeName" readonly="readonly">
                             </div>
                         </div>
                     </div>
@@ -131,7 +134,7 @@
                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
                                 <input type="text" class="form-control" id="employeePhone" value="@Model.Phone"
-                                    readonly="readonly">
+                                readonly="readonly">
                             </div>
                         </div>
                     </div>
@@ -144,7 +147,7 @@
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
                                 <input type="text" class="form-control" id="employeeEmail" value="@Model.Email"
-                                    readonly="readonly">
+                                readonly="readonly">
                             </div>
                         </div>
                     </div>
@@ -159,7 +162,7 @@
                                     <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                                 </div>
                                 <input type="text" class="form-control" value="@Model.Salary.ToString()"
-                                    id="employeeSalary" readonly="readonly">
+                                id="employeeSalary" readonly="readonly">
                             </div>
                         </div>
                     </div>
@@ -169,19 +172,19 @@
                             <label>Hire Date</label>
                             <div class="input-group date" id="employeeHireDate" data-target-input="nearest">
                                 <div class="input-group-prepend" data-target="#employeeHireDate"
-                                    data-toggle="datetimepicker">
+                                data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <input type="text" class="form-control datetimepicker-input"
-                                    data-target="#employeeHireDate" id="employeeHireDateInput"
-                                    value="@Model.HireDate.ToString("dd/MM/yyyy")" disabled>
+                                data-target="#employeeHireDate" id="employeeHireDateInput"
+                                value="@Model.HireDate.ToString("dd/MM/yyyy")" disabled>
                             </div>
                         </div>
                         <script>
                             $(function () {
-                                $('#employeeHireDate').datetimepicker({
-                                    format: 'DD/MM/YYYY'
-                                });
+                            $('#employeeHireDate').datetimepicker({
+                            format: 'DD/MM/YYYY'
+                            });
                             });
                         </script>
                     </div>
@@ -191,26 +194,26 @@
                             <label>Leave Date</label>
                             <div class="input-group date" id="employeeLeaveDateTemp" data-target-input="nearest">
                                 <div class="input-group-prepend" data-target="#employeeLeaveDateTemp"
-                                     data-toggle="datetimepicker">
+                                data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <input type="text" class="form-control"
-                                       data-target="#employeeLeaveDateTemp" id="employeeLeaveDateTempInput"
-                                       value="@Model.LeaveDate?.ToString("dd/MM/yyyy")" disabled>
+                                data-target="#employeeLeaveDateTemp" id="employeeLeaveDateTempInput"
+                                value="@Model.LeaveDate?.ToString("dd/MM/yyyy")" disabled>
                             </div>
                         </div>
                         <script>
                             $(function () {
-                                $('#employeeLeaveDateTemp').datetimepicker({
-                                    format: 'DD/MM/YYYY'
-                                });
+                            $('#employeeLeaveDateTemp').datetimepicker({
+                            format: 'DD/MM/YYYY'
+                            });
                             });
                         </script>
                     </div>
                 </div>
 
 
-                
+
 
 
                 <div class="row" id="leaveDateRow" style="display: none;">
@@ -222,10 +225,10 @@
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                                 <input type="text" class="form-control datetimepicker-input" data-target="#leaveDate"
-                                       id="leaveDateInput" value="@Model.LeaveDate?.ToString("dd/MM/yyyy")" disabled>
+                                id="leaveDateInput" value="@Model.LeaveDate?.ToString("dd/MM/yyyy")" disabled>
                             </div>
                         </div>
-                       
+
                     </div>
                 </div>
 
@@ -237,13 +240,15 @@
     </div>
 </div>
 
+@if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "İNSPECTİON"))
+                                {
 @if (ViewBag.InspectionRecords != null && ViewBag.InspectionRecords.Count > 0)
 {
     <div class="card card-primary card-outline">
         <div class="card-header">
             <h3 class="card-title"><i class="fas fa-search"></i> &ensp; Inspection Records</h3>
             <div class="card-tools">
-                
+
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
                 </button>
@@ -261,7 +266,7 @@
                         <th style="width: 15%">Inspection Type</th>
                         <th style="width: 15%">Ship</th>
                         <th style="width: 15%">Ship Type</th>
-                        
+
                         <th style="width: 12%"></th>
                     </tr>
                 </thead>
@@ -274,11 +279,13 @@
                             <td>@inspectionRecord.InspectionType.TypeName</td>
                             <td>@inspectionRecord.Ship.ShipName</td>
                             <td>@inspectionRecord.Ship.ShipType.ShipTypeName</td>
-                            
+
                             <td class="project-actions text-right">
-                                <a asp-controller="Inspection" asp-action="Details" asp-route-inspectionId="@inspectionRecord.InspectionRecordId" class="btn btn-info btn-sm">
-                                    <i class="fas fa-eye"></i> Details
-                                </a>
+                                
+                                    <a asp-controller="Inspection" asp-action="Details" asp-route-inspectionId="@inspectionRecord.InspectionRecordId" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> Details
+                                    </a>
+                                
                             </td>
                         </tr>
                     }
@@ -287,7 +294,10 @@
         </div>
     </div>
 }
+}
 
+@if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "MAİNTENANCE"))
+                                {
 @if (ViewBag.MaintenanceRecords != null && ViewBag.MaintenanceRecords.Count > 0)
 {
     <div class="card card-warning card-outline">
@@ -339,9 +349,11 @@
                                 }
                             </td>
                             <td class="project-actions text-right">
-                                <a asp-controller="Maintenance" asp-action="Details" asp-route-maintenanceRecordId="@maintenanceRecord.MaintenanceRecordId" class="btn btn-info btn-sm">
-                                    <i class="fas fa-eye"></i> Details
-                                </a>
+                                
+                                    <a asp-controller="Maintenance" asp-action="Details" asp-route-maintenanceRecordId="@maintenanceRecord.MaintenanceRecordId" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> Details
+                                    </a>
+                                
                             </td>
                         </tr>
                     }
@@ -350,7 +362,7 @@
         </div>
     </div>
 }
-
+}
 
 
 @section Scripts {
