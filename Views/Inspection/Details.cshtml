@@ -109,7 +109,8 @@
                         <td>@finding.InspectionCriteria.Description</td>
                         <td>@finding.Description</td>
                         <td>
-                            @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "FİNDİNGDELETE"))
+                            @if (Authorities.isParticipant(ActiveUser.activeUser.EmployeeId, Model.InspectionRecordId, "İNSPECTİON") || Authorities.CheckAuth(ActiveUser.activeUser.EmployeeId, "İNSPECTİONADD"))
+
                             {
                                 <button class="btn btn-danger btn-sm delete-finding-button"
                                 data-finding-id="@finding.InspectionFindingId"
@@ -138,7 +139,7 @@
 
         <div class="form-group mb-0 ml-auto" style="width: auto;">
             <div class="row">
-                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "PARTİCİPANTADD"))
+                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "İNSPECTİONADD"))
                 {
                     <div style="width: 200px;">
                         <button type="button" class="btn btn-outline-success btn-block btn-sm" data-toggle="modal" data-target="#modal-default">
@@ -187,7 +188,7 @@
                                         <i class="fas fa-user"></i>&nbsp; View Profile
                                     </a>
                                 }
-                                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "PARTİCİPANTADD"))
+                                @if (Authorities.CheckAuth(ActiveUser.activeUser.EmployeePositionId, "İNSPECTİONADD"))
                                 {
                                 <button class="btn btn-danger btn-sm delete-finding-button"
                                         data-employee-id="@employee.EmployeeId"
